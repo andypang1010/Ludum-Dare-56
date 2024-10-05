@@ -8,7 +8,7 @@ public class PlayerParry : MonoBehaviour
     private bool isParrying = false;
     private float parryStartTime;
     private Animator animator;
-    private SphereCollider parryCollider;
+    private BoxCollider parryCollider;
     private Rigidbody rb;
     private int parryHash;
     private PlayerMovement playerMovement;
@@ -18,7 +18,8 @@ public class PlayerParry : MonoBehaviour
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         playerMovement = GetComponent<PlayerMovement>();
-        parryCollider = GetComponent<SphereCollider>();
+
+        parryCollider = GetComponent<BoxCollider>();
         parryCollider.enabled = false;
 
         parryHash = Animator.StringToHash("OnParry");
@@ -79,6 +80,7 @@ public class PlayerParry : MonoBehaviour
             && enemyAttack.GetCanParry()
             && isParrying == true) {
                 SuccessfulParry();
+                enemyAttack.isStunned = true;
             }
         }
     }
