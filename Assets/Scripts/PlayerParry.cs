@@ -66,18 +66,22 @@ public class PlayerParry : MonoBehaviour
         return isParrying;
     }
 
-    public void EndParry() {
+    public void EndParry()
+    {
         isParrying = false;
         animator.SetBool(parryHash, false);
         rb.constraints = RigidbodyConstraints.FreezeRotation;
     }
 
-    private void OnTriggerStay(Collider other) {
-        if (other.transform.root.CompareTag("Enemy")) {
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.transform.root.CompareTag("Enemy"))
+        {
             if (other.transform.root.TryGetComponent(out EnemyAttack enemyAttack)
 
             && enemyAttack.GetCanParry()
-            && isParrying == true) {
+            && isParrying == true)
+            {
                 SuccessfulParry();
             }
         }
