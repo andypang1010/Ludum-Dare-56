@@ -26,9 +26,16 @@ public class EnemyAI : MonoBehaviour
     public List<Transform> walkpoints;
     public int currentWalkpointIndex = 0;
 
+    //Attacking
+    public float timeBetweenAttacks;
+    bool alreadyAttacked;
+    public float fovAngle = 150f; // Field of view angle (90 degrees)
+    public float sightDistance = 5f; // Max distance the enemy can see
 
-    [Header("Sensors")]
-    public float detectRange, attackRange;
+    public float attackRange = 2f;
+
+    //For switching states
+    public float detectRange;
 
     private Animator animator;
     private int idleHash, walkHash, runHash, attackHash;
@@ -64,6 +71,8 @@ public class EnemyAI : MonoBehaviour
     {
         if (!enemyAttack.isStunned) {
             
+            if (IsPlayerInFieldOfView() && IsPlayerVisible())
+            {}
             // TODO: If player is seen, then check distance to go into Attack or Chase; else, just patrol or stand around
             float distanceToPlayer = Vector3.Distance(playerTransform.position, transform.position);
 
@@ -120,84 +129,7 @@ public class EnemyAI : MonoBehaviour
         return currentState;
     }
 
-    private void Patrol() {
-        if (Vector3.Distance(transform.position, walkpoints[currentWalkpointIndex].position) < 1f) {
-            currentWalkpointIndex = (currentWalkpointIndex + 1) % walkpoints.Count;
-        }
 
-        agent.SetDestination(walkpoints[currentWalkpointIndex].position);
-    }
-
-    private void StopMoving(bool freezeRotY) {
-        agent.isStopped = true;
-
-        GetComponent<Rigidbody>().constraints = 
-            RigidbodyConstraints.FreezePosition 
-            | (freezeRotY ? RigidbodyConstraints.FreezeRotation : 
-
-            RigidbodyConstraints.FreezeRotationX 
-            | RigidbodyConstraints.FreezeRotationZ);
-    }
-
-    private void ContinueMoving() {
-        agent.isStopped = false;
-
-        GetComponent<Rigidbody>().constraints = 
-            RigidbodyConstraints.FreezeRotationX 
-            | RigidbodyConstraints.FreezeRotationZ;
-    }
-
-    private void SetAnimationBool() {
-
-        Vector3 velocity = agent.velocity;
-        velocity -= transform.up * velocity.y;
-        print("Velocity in x and z: " + velocity);
-
-        animator.SetFloat(velXHash, velocity.x);
-        animator.SetFloat(velZHash, velocity.z);
-
-        switch (currentState) {
-            case ActionState.IDLE:
-                agent.isStopped = true;
-                GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-
-                animator.SetBool(idleHash, true);
-                animator.SetBool(walkHash, false);
-                animator.SetBool(runHash, false);
-                animator.SetBool(attackHash, false);
-
-                break;
-
-            case ActionState.PATROL:
-                agent.isStopped = false;
-                GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-
-                animator.SetBool(idleHash, false);
-                animator.SetBool(walkHash, true);
-                animator.SetBool(runHash, false);
-                animator.SetBool(attackHash, false);
-
-                break;
-            case ActionState.CHASE:
-                agent.isStopped = false;
-                GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-
-                animator.SetBool(idleHash, false);
-                animator.SetBool(walkHash, false);
-                animator.SetBool(runHash, true);
-                animator.SetBool(attackHash, false);
-
-                break;
-            case ActionState.ATTACK:
-
-                animator.SetBool(idleHash, false);
-                animator.SetBool(walkHash, false);
-                animator.SetBool(runHash, false);
-                animator.SetBool(attackHash, true);
-
-
-                break;
-        }
     }
 
 }
