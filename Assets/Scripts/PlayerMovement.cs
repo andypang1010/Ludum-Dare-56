@@ -35,6 +35,7 @@ public class PlayerMovement : MonoBehaviour
 
     private Animator animator;
     private int idleHash, walkHash, crouchIdleHash, runHash;
+    private int velXHash, velZHash;
 
     Rigidbody rb;
     Vector3 moveDirection;
@@ -50,6 +51,9 @@ public class PlayerMovement : MonoBehaviour
         walkHash = Animator.StringToHash("OnWalk");
         crouchIdleHash = Animator.StringToHash("OnCrouch");
         runHash = Animator.StringToHash("OnRun");
+
+        velXHash = Animator.StringToHash("Vel_X");
+        velZHash = Animator.StringToHash("Vel_Z");
     }
 
     void Update()
@@ -74,6 +78,7 @@ public class PlayerMovement : MonoBehaviour
     void GetInput()
     {
         Vector2 movement = InputController.Instance.GetWalkDirection();
+
         horizontalInput = movement.x;
         verticalInput = movement.y;
 
@@ -193,6 +198,10 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void SetAnimationBool() {
+        
+        animator.SetFloat(velXHash, InputController.Instance.GetWalkDirection().normalized.x);
+        animator.SetFloat(velZHash, InputController.Instance.GetWalkDirection().normalized.y);
+        
         switch (movementState)
         {
             case MovementState.IDLE:
