@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
     public enum MovementState {
         IDLE,
         WALK,
-        SPRINT,
+        RUN,
         CROUCH
     }
 
@@ -25,7 +25,6 @@ public class PlayerMovement : MonoBehaviour
     [Header("Crouch")]
     public float crouchSpeed;
     public float crouchScale;
-    private float defaultScale;
 
     [Header("Slope Check")]
     public float maxSlopeAngle;
@@ -34,12 +33,8 @@ public class PlayerMovement : MonoBehaviour
     public float playerHeight { get; private set; } = 1.8f;
     bool exitingSlope;
 
-    [Header("Step Check")]
-    public bool stepClimbEnabled;
-    public GameObject rayLower;
-    public GameObject rayUpper;
-    public float stepHeight;
-    public float stepSmoothing;
+    private Animator animator;
+    private int idleHash, walkHash, crouchIdleHash, runHash;
 
     Rigidbody rb;
     Vector3 moveDirection;
@@ -49,7 +44,12 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
 
-        rayUpper.transform.position = rayLower.transform.position + stepHeight * Vector3.up;
+        animator = GetComponent<Animator>();
+
+        idleHash = Animator.StringToHash("OnIdle");
+        walkHash = Animator.StringToHash("OnWalk");
+        crouchIdleHash = Animator.StringToHash("OnCrouch");
+        runHash = Animator.StringToHash("OnRun");
     }
 
     void Update()
@@ -62,15 +62,13 @@ public class PlayerMovement : MonoBehaviour
         GetInput();
         SpeedControl();
         SetDrag();
+
         HandleMovementState();
+        SetAnimationBool();
     }
 
     void FixedUpdate() {
         Move();
-
-        if (stepClimbEnabled) {
-            StepClimb();
-        }
     }
 
     void GetInput()
@@ -89,22 +87,20 @@ public class PlayerMovement : MonoBehaviour
         if ((!InputController.Instance.GetCrouchHold())
         && !Physics.Raycast(transform.position, Vector3.up, playerHeight * 0.5f + 0.2f))
         {
-            transform.localScale = new Vector3(transform.localScale.x, 1, transform.localScale.z);
+            GetComponent<CapsuleCollider>().height = playerHeight;
+            GetComponent<CapsuleCollider>().center = new Vector3(0, 0.9f, 0);
+            // transform.localScale = new Vector3(transform.localScale.x, 1, transform.localScale.z);
         }
     }
 
     void HandleMovementState() {
-        if (InputController.Instance.GetCrouchHold()
-        || (movementState == MovementState.CROUCH 
-        && !InputController.Instance.GetCrouchHold()
-        && Physics.Raycast(transform.position, Vector3.up, playerHeight * 0.5f + 0.2f))) {
-        // && Physics.CapsuleCast(transform.position + GetComponentInChildren<CapsuleCollider>().bounds.center + Vector3.down * playerHeight * 0.5f, transform.position + GetComponentInChildren<CapsuleCollider>().bounds.center + Vector3.up * playerHeight * 0.5f, 0.5f, Vector3.up, 0.5f))) {
+        if (InputController.Instance.GetCrouchHold()) {
             movementState = MovementState.CROUCH;
             moveSpeed = crouchSpeed;
         }
 
         else if (InputController.Instance.GetSprint()) {
-            movementState = MovementState.SPRINT;
+            movementState = MovementState.RUN;
             moveSpeed = sprintSpeed;
         }
 
@@ -158,25 +154,16 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
-
     
     public void Crouch()
     {
         // Shrink to crouch size
-        transform.localScale = new Vector3(transform.localScale.x, crouchScale, transform.localScale.z);
+        // transform.localScale = new Vector3(transform.localScale.x, crouchScale, transform.localScale.z);
+        GetComponent<CapsuleCollider>().height = playerHeight * crouchScale;
+        GetComponent<CapsuleCollider>().center = new Vector3(0, 0.65f, 0);
 
         // Apply downward force so doesn't float
         rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
-    }
-
-    void StepClimb() {
-        Debug.DrawRay(rayLower.transform.position, rayLower.transform.forward * 0.1f, Color.red);
-        Debug.DrawRay(rayUpper.transform.position, rayUpper.transform.forward * 0.2f, Color.red);
-
-        if (Physics.Raycast(rayLower.transform.position, rayLower.transform.forward, out _, 0.15f)
-        && !Physics.Raycast(rayUpper.transform.position, rayUpper.transform.forward, out _, 0.3f)) {
-            rb.position += new Vector3(0f , stepSmoothing, 0f);
-        }
     }
 
     bool OnSlope() {
@@ -203,5 +190,47 @@ public class PlayerMovement : MonoBehaviour
     
     public MovementState GetMovementState() {
         return movementState;
+    }
+
+    void SetAnimationBool() {
+        switch (movementState)
+        {
+            case MovementState.IDLE:
+                animator.SetBool(idleHash, true);
+                animator.SetBool(walkHash, false);
+                animator.SetBool(runHash, false);
+                animator.SetBool(crouchIdleHash, false);
+
+                break;
+            case MovementState.WALK:
+                animator.SetBool(idleHash, false);
+                animator.SetBool(walkHash, true);
+                animator.SetBool(runHash, false);
+                animator.SetBool(crouchIdleHash, false);
+                break;
+
+            case MovementState.RUN:
+                animator.SetBool(idleHash, false);
+                animator.SetBool(walkHash, false);
+                animator.SetBool(runHash, true);
+                animator.SetBool(crouchIdleHash, false);
+            
+                break;
+            case MovementState.CROUCH:
+                if (moveDirection.magnitude > 0) {
+                    animator.SetBool(idleHash, false);
+                    animator.SetBool(walkHash, true);
+                    animator.SetBool(runHash, false);
+                    animator.SetBool(crouchIdleHash, true);
+                }
+                else {
+                    animator.SetBool(idleHash, false);
+                    animator.SetBool(walkHash, false);
+                    animator.SetBool(runHash, false);
+                    animator.SetBool(crouchIdleHash, true);
+                }
+
+                break;
+        }
     }
 }
