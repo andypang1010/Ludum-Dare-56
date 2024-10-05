@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
@@ -199,8 +200,8 @@ public class PlayerMovement : MonoBehaviour
 
     void SetAnimationBool() {
         
-        animator.SetFloat(velXHash, InputController.Instance.GetWalkDirection().normalized.x);
-        animator.SetFloat(velZHash, InputController.Instance.GetWalkDirection().normalized.y);
+        animator.SetFloat(velXHash, InputController.Instance.GetWalkDirection().x);
+        animator.SetFloat(velZHash, InputController.Instance.GetWalkDirection().y);
         
         switch (movementState)
         {
@@ -209,8 +210,8 @@ public class PlayerMovement : MonoBehaviour
                 animator.SetBool(walkHash, false);
                 animator.SetBool(runHash, false);
                 animator.SetBool(crouchIdleHash, false);
-
                 break;
+
             case MovementState.WALK:
                 animator.SetBool(idleHash, false);
                 animator.SetBool(walkHash, true);
@@ -223,8 +224,8 @@ public class PlayerMovement : MonoBehaviour
                 animator.SetBool(walkHash, false);
                 animator.SetBool(runHash, true);
                 animator.SetBool(crouchIdleHash, false);
-            
                 break;
+
             case MovementState.CROUCH:
                 if (moveDirection.magnitude > 0) {
                     animator.SetBool(idleHash, false);

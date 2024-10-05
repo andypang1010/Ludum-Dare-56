@@ -71,17 +71,17 @@ public class EnemyMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (enemyAI.getState() == EnemyAI.AttackState.PATROL)
+        if (enemyAI.GetCurrentState() == EnemyAI.ActionState.PATROL)
         {
             movementState = MovementState.WALK;
             // Move();
         }
-        else if (enemyAI.getState() == EnemyAI.AttackState.CHASE)
+        else if (enemyAI.GetCurrentState() == EnemyAI.ActionState.CHASE)
         {
             movementState = MovementState.WALK;
             // Move();
         }
-        else if (enemyAI.getState() == EnemyAI.AttackState.ATTACK)
+        else if (enemyAI.GetCurrentState() == EnemyAI.ActionState.ATTACK)
         {
             movementState = MovementState.ATTACK;
             // Move();
