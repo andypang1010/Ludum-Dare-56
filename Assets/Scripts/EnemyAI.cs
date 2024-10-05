@@ -24,9 +24,13 @@ public class EnemyAI : MonoBehaviour
     //Attacking
     public float timeBetweenAttacks;
     bool alreadyAttacked;
+    public float fovAngle = 150f; // Field of view angle (90 degrees)
+    public float sightDistance = 5f; // Max distance the enemy can see
+
+    public float attackRange = 2f;
 
     //For switching states
-    public float detectRange, attackRange;
+    public float detectRange;
 
     // public EnemyMovement enemyMovement;
     public EnemyAttack enemyAttack;
@@ -41,18 +45,21 @@ public class EnemyAI : MonoBehaviour
     }
     void Update()
     {
-        float distanceToPlayer = Vector3.Distance(playerTransform.position, transform.position);
-        if (distanceToPlayer <= attackRange)
+        float distanceToPlayer = (playerTransform.position - transform.position).magnitude;
+        if (IsPlayerInFieldOfView() && IsPlayerVisible())
         {
-            switchState(AttackState.ATTACK);
-            agent.SetDestination(playerTransform.position);
-            // enemyMovement.SetDestination(playerTransform.position);
-        }
-        else if (distanceToPlayer <= detectRange)
-        {
-            switchState(AttackState.CHASE);
-            agent.SetDestination(playerTransform.position);
-            // enemyMovement.SetDestination(playerTransform.position);
+            if (distanceToPlayer <= attackRange)
+            {
+                switchState(AttackState.ATTACK);
+                agent.SetDestination(playerTransform.position);
+                // enemyMovement.SetDestination(playerTransform.position);
+            }
+            else
+            {
+                switchState(AttackState.CHASE);
+                agent.SetDestination(playerTransform.position);
+                // enemyMovement.SetDestination(playerTransform.position);
+            }
         }
         else
         {
@@ -93,5 +100,24 @@ public class EnemyAI : MonoBehaviour
         walkpoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
         walkPointSet = true;
     }
+    public bool IsPlayerInFieldOfView()
+    {
+        Vector3 directionToPlayer = (playerTransform.position - transform.position).normalized;
+        float angleBetweenEnemyAndPlayer = Vector3.Angle(transform.forward, directionToPlayer);
+        return angleBetweenEnemyAndPlayer <= fovAngle / 2f;
+    }
 
+    public bool IsPlayerVisible()
+    {
+        RaycastHit hit;
+        Vector3 directionToPlayer = (playerTransform.position - transform.position).normalized;
+        if (Physics.Raycast(transform.position, directionToPlayer, out hit, sightDistance))
+        {
+            if (hit.transform == playerTransform)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }
