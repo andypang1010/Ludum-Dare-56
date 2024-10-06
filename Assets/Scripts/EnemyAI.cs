@@ -15,13 +15,13 @@ public class EnemyAI : MonoBehaviour
 
     [Header("Pathfinding")]
     public ActionState currentState;
-    public Transform cameraTransform;
-    public Transform playerTransform;
     public Vector3 targetPosition;
     public float maxDetectTime;
     private float lastDetectedTime;
     private bool detectedBefore;
     private NavMeshAgent agent;
+    private Transform playerTransform;
+    private Transform cameraTransform;
 
     [Header("Patrolling")]
     public List<Transform> walkpoints;
@@ -45,9 +45,12 @@ public class EnemyAI : MonoBehaviour
     void Start()
     {
         playerTransform = GameObject.Find("PLAYER").transform;
+        cameraTransform = GameObject.Find("CAMERA").transform;
+
         playerMovement = GameObject.Find("PLAYER").GetComponent<PlayerMovement>();
 
         agent = GetComponent<NavMeshAgent>();
+
 
         enemyAttack = GetComponent<EnemyAttack>();
 
@@ -82,15 +85,15 @@ public class EnemyAI : MonoBehaviour
             if (DistanceToPlayer() <= attackRange)
             {
                 SetCurrentState(ActionState.ATTACK);
-                exclamationMarkCanvas.SetActive(true);
             }
 
             else
             {
                 SetCurrentState(ActionState.CHASE);
-                exclamationMarkCanvas.SetActive(true);
             }
 
+            exclamationMarkCanvas.SetActive(true);
+            exclamationMarkCanvas.transform.LookAt(cameraTransform.position + cameraTransform.rotation * Vector3.forward, Vector3.up);
             agent.SetDestination(playerTransform.position);
         }
 
@@ -123,10 +126,9 @@ public class EnemyAI : MonoBehaviour
                 SetCurrentState(ActionState.IDLE);
                 targetPosition = transform.position;
             }
-            exclamationMarkCanvas.SetActive(false);
 
             agent.SetDestination(targetPosition);
-            exclamationMarkCanvas.transform.LookAt(cameraTransform.position + cameraTransform.rotation * Vector3.forward, cameraTransform.rotation * Vector3.up);
+            exclamationMarkCanvas.SetActive(false);
         }
 
         SetAnimationBool();
