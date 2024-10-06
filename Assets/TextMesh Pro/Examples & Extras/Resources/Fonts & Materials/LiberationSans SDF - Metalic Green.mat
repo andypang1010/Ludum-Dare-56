@@ -2,20 +2,38 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: LiberationSans SDF - Metalic Green
-  m_Shader: {fileID: 4800000, guid: 68e6db2ebdc24f95958faec2be5558d6, type: 3}
-  m_ShaderKeywords: BEVEL_ON GLOW_ON OUTLINE_ON UNDERLAY_ON
+  m_Shader: {fileID: 4800000, guid: dd63f044e3b25be4aa593dd5946a36f5, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _OUTLINETYPE_NORMAL
+  - _OVERLAYMODE1_NONE
+  - _OVERLAYMODE_NONE
+  - _RIMSPLITCOLOR_NOSPLIT
+  - _USEADDITIONALLIGHTSDIFFUSE_ON
+  - _USEHATCHINGCONSTANTSCALE_ON
+  - _USELIGHTRAMP_STEP
+  - _USEPURESKETCH_ON
+  - _USESPECULAR_ON
+  m_InvalidKeywords:
+  - BEVEL_ON
+  - GLOW_ON
+  - OUTLINE_ON
+  - UNDERLAY_ON
+  - _USESHADOWS_ON
   m_LightmapFlags: 5
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -27,8 +45,32 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _DiffuseWarpNoise:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _FaceTex:
         m_Texture: {fileID: 2800000, guid: 283f897e4925411ebbaa758b4cb13fc2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _HalftoneTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Hatch1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Hatch2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _LightRampTexture:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -36,12 +78,50 @@ Material:
           type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _OutlineTex:
         m_Texture: {fileID: 2800000, guid: f88677df267a41d6be1e7a6133e7d227, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _PaperTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SpecGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SpecularMaskTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
+    - _AdaptiveThicnkess: 0
+    - _AdditionalLightsAmount: 1
+    - _AdditionalLightsFaloff: 1
+    - _AdditionalLightsIntesity: 1
+    - _AdditionalLightsSmoothnessMultiplier: 1
+    - _AlphaCutoff: 0.5
     - _Ambient: 0
+    - _BacklightAmount: 0.5
+    - _BacklightHardness: 0
+    - _BacklightIntensity: 1
     - _Bevel: 1
     - _BevelClamp: 0.617
     - _BevelOffset: -0.01
@@ -50,55 +130,152 @@ Material:
     - _BumpFace: 0
     - _BumpOutline: 0
     - _ColorMask: 15
+    - _Cutoff: 0
+    - _Darken: 0
     - _Diffuse: 0
+    - _DiffusePosterizeOffset: 0
+    - _DiffusePosterizePower: 1
+    - _DiffusePosterizeSteps: 3
+    - _DiffuseWarpAffectHalftone: 0
+    - _DiffuseWarpBrightnessOffset: 1.12
     - _FaceDilate: 0.15
     - _FaceUVSpeedX: 0
     - _FaceUVSpeedY: 0
+    - _Glossiness: 0.5
     - _GlowInner: 0.136
     - _GlowOffset: 0.427
     - _GlowOuter: 0.062
     - _GlowPower: 0.941
     - _GradientScale: 10
+    - _HalftoneEdgeOffset: 0.1
+    - _HalftoneSmoothness: 0.3
+    - _HalftoneThreshold: 0.1
+    - _HalftoneToonAffect: 0
+    - _HaltonePatternSize: 0
+    - _IndirectLightAffectOnHatch: 0
+    - _IndirectLightStrength: 1
+    - _InverseMask: 0
     - _LightAngle: 3.1416
+    - _LightRampOffset: 0
+    - _Lighten: 0
+    - _MainLightIntesity: 1
     - _MaskSoftnessX: 0
     - _MaskSoftnessY: 0
+    - _MaxScaleDependingOnCamera: 1
+    - _NormalMapStrength: 1
+    - _OcclusionStrength: 1
+    - _OutlineDynamicSpeed: 0
+    - _OutlineNoiseIntesity: 1
+    - _OutlineNoiseScale: 10
     - _OutlineSoftness: 0
+    - _OutlineTextureStrength: 0
+    - _OutlineType: 0
     - _OutlineUVSpeedX: 0
     - _OutlineUVSpeedY: 0
     - _OutlineWidth: 0.219
+    - _OverlayMode: 0
+    - _OverlayMode1: 0
+    - _OverlayRotation: 0
+    - _OverlayUVTilling: 0
+    - _PaperTilling: 1
     - _PerspectiveFilter: 0
+    - _QueueControl: -1
+    - _QueueOffset: 0
+    - _RampDiffuseTextureLoaded: 1
     - _Reflectivity: 12.76
+    - _RimPower: 2
+    - _RimSmoothness: 0
+    - _RimSplitColor: 0
+    - _RimThickness: 1
     - _ScaleRatioA: 0.9
     - _ScaleRatioB: 0.6525
     - _ScaleRatioC: 0.6525
     - _ScaleX: 1
     - _ScaleY: 1
     - _ShaderFlags: 0
+    - _ShapeSmoothness: 0.2
     - _Sharpness: 0
+    - _SideShineAmount: 0.2717647
+    - _SideShineHardness: 0
+    - _SideShineIntensity: 1
+    - _SmoothnessMultiplier: 1
+    - _SpecularFaloff: 0
+    - _SpecularMaskRotation: 0
+    - _SpecularMaskScale: 1
+    - _SpecularMaskStrength: 0.1856417
+    - _SpecularPosterizeSteps: 0
     - _SpecularPower: 1
+    - _SpecularShadowMask: 0
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
+    - _StepHalftoneTexture: 0
+    - _StepOffset: 0
+    - _Strength: 0
     - _TextureHeight: 1024
     - _TextureWidth: 1024
+    - _Thicnkess: 0
+    - _UVAnimationSpeed: 0
+    - _UVAnimationSpeedSpec: 0
+    - _UVAnimationSpeedWarp: 0
+    - _UVScrollSpeed: 0
+    - _UVScrollSpeedSpec: 0
+    - _UVScrollSpeedWarp: 0
+    - _UVSrcrollAngle: 0
+    - _UVSrcrollAngleSpec: 0
+    - _UVSrcrollAngleWarp: 0
     - _UnderlayDilate: 0
     - _UnderlayOffsetX: 0.5
     - _UnderlayOffsetY: -0.5
     - _UnderlaySoftness: 0.2
+    - _UseAdaptiveScreenUvs: 0
+    - _UseAdaptiveScreenUvsWarp: 0
+    - _UseAdaptiveUvsSpecular: 0
+    - _UseAdditionalLightsDiffuse: 1
+    - _UseBacklight: 0
+    - _UseDiffuseWarp: 0
+    - _UseDiffuseWarpAsOverlay: 0
+    - _UseDynamicOutline: 0
+    - _UseEmission: 0
+    - _UseEnvironmentRefletion: 0
+    - _UseHatchingConstantScale: 1
+    - _UseLightRamp: 0
+    - _UseOutline: 0
+    - _UsePureSketch: 1
+    - _UseRimLight: 0
+    - _UseScreenUvs: 0
+    - _UseScreenUvsSpecular: 0
+    - _UseScreenUvsWarp: 0
+    - _UseShadows: 1
+    - _UseSpecular: 1
+    - _UseSpecularMask: 0
     - _VertexOffsetX: 0
     - _VertexOffsetY: 0
+    - _WarpStrength: 0
+    - _WarpTextureRotation: 0
+    - _WarpTextureScale: 1
     - _WeightBold: 0.75
     - _WeightNormal: 0
     m_Colors:
     - _ClipRect: {r: -10000, g: -10000, b: 10000, a: 10000}
+    - _Color: {r: 0.6792453, g: 0.6792453, b: 0.6792453, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
     - _EnvMatrixRotation: {r: 0, g: 0, b: 0, a: 0}
     - _FaceColor: {r: 0, g: 0.75735635, b: 0, a: 1}
     - _GlowColor: {r: 0, g: 1, b: 0, a: 0.5}
+    - _HalftoneColor: {r: 0, g: 0, b: 0, a: 1}
+    - _HatchingColor: {r: 0, g: 0, b: 0, a: 1}
     - _MaskCoord: {r: 0, g: 0, b: 100000, a: 100000}
     - _OutlineColor: {r: 1, g: 1, b: 1, a: 1}
     - _ReflectFaceColor: {r: 0, g: 0, b: 0, a: 1}
     - _ReflectOutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 0}
+    - _RimShadowColor: {r: 0, g: 0.055514283, b: 0.9622641, a: 0}
+    - _ShadowColor: {r: 0, g: 0, b: 0, a: 0}
+    - _SpecColor: {r: 1, g: 1, b: 1, a: 0}
     - _SpecularColor: {r: 0.7689687, g: 1, b: 0.75000346, a: 1}
     - _UnderlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

@@ -24,6 +24,8 @@ public class EnemyAI : MonoBehaviour
     private Transform cameraTransform;
 
     [Header("Patrolling")]
+    public float patrolSpeed;
+    public float chaseSpeed;
     public List<Transform> walkpoints;
     public int currentWalkpointIndex = 0;
 
@@ -97,6 +99,7 @@ public class EnemyAI : MonoBehaviour
             else
             {
                 SetCurrentState(ActionState.CHASE);
+                agent.speed = chaseSpeed;
             }
 
             exclamationMarkCanvas.SetActive(true);
@@ -111,6 +114,7 @@ public class EnemyAI : MonoBehaviour
             if (walkpoints.Count > 1)
             {
                 SetCurrentState(ActionState.PATROL);
+                agent.speed = patrolSpeed;
 
                 if (detectedBefore && Time.time - lastDetectedTime > maxDetectTime)
                 {
