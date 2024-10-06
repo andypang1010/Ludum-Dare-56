@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class PauseMenuScript : MonoBehaviour
 {
     // Start is called before the first frame update
     public bool GameIsPaused = false;
     public GameObject pauseMenuUI;
+    public GameObject helpMenuUI;
     void Start()
     {
 
@@ -42,4 +43,20 @@ public class PauseMenuScript : MonoBehaviour
         Time.timeScale = 0f;
         GameIsPaused = true;
     }
+
+    public void ExitToMainMenu()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+    }
+    public void ShowHelp()
+    {
+        helpMenuUI.SetActive(true);
+        pauseMenuUI.SetActive(false);
+    }
+    public void HideHelp()
+    {
+        helpMenuUI.SetActive(false);
+        pauseMenuUI.SetActive(true);
+    }
 }
+

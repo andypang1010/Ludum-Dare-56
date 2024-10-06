@@ -9,10 +9,11 @@ public class PlayerRotation : MonoBehaviour
 
     private float currentYaw = 0f;
     public GameObject pauseMenu;
+    public GameObject helpMenu;
 
     void Update()
     {
-        if (pauseMenu.activeSelf) { return; }
+        if (pauseMenu.activeSelf || helpMenu.activeSelf) { return; }
         currentYaw = Input.GetAxis("Mouse X") * rotationSpeed;
         transform.Rotate(Vector3.up, currentYaw);
     }
