@@ -28,10 +28,13 @@ public class EnemyAI : MonoBehaviour
     public float sightDistance = 10f; // Max distance the enemy can see
     public float attackRange = 2f;
 
+    public float listenRange = 10f;
+
     private Animator animator;
     private int idleHash, walkHash, runHash, attackHash;
 
     private EnemyAttack enemyAttack;
+    private PlayerMovement.MovementState playerState;
 
     void Start()
     {
@@ -56,41 +59,70 @@ public class EnemyAI : MonoBehaviour
 
     void Update()
     {
-        if (!enemyAttack.isStunned) {
-            
-            if (IsPlayerInFieldOfView() && IsPlayerVisible()) {
+        playerState = GameObject.Find("PLAYER").GetComponent<PlayerMovement>().GetMovementState();
+        if (!enemyAttack.isStunned)
+        {
+            if (playerState.Equals(PlayerMovement.MovementState.RUN))
+            {
                 float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
-
-                // Attack
-                if (distanceToPlayer <= attackRange)
+                if (distanceToPlayer <= listenRange)
                 {
-                    agent.SetDestination(playerTransform.position);
-                    SetCurrentState(ActionState.ATTACK);
-                }
+                    if (distanceToPlayer <= attackRange)
+                    {
+                        agent.SetDestination(playerTransform.position);
+                        SetCurrentState(ActionState.ATTACK);
+                    }
 
-                // Chase
-                else if (distanceToPlayer <= sightDistance)
-                {
-                    agent.SetDestination(playerTransform.position);
+                    // Chase
+                    else
+                    {
+                        agent.SetDestination(playerTransform.position);
 
-                    SetCurrentState(ActionState.CHASE);
+                        SetCurrentState(ActionState.CHASE);
+                    }
                 }
             }
-            
             else
             {
-                if (walkpoints.Count > 1) {
-                    Patrol();
-                    SetCurrentState(ActionState.PATROL);
+
+                if (IsPlayerInFieldOfView() && IsPlayerVisible())
+                {
+                    float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
+
+                    // Attack
+                    if (distanceToPlayer <= attackRange)
+                    {
+                        agent.SetDestination(playerTransform.position);
+                        SetCurrentState(ActionState.ATTACK);
+                    }
+
+                    // Chase
+                    else if (distanceToPlayer <= sightDistance)
+                    {
+                        agent.SetDestination(playerTransform.position);
+
+                        SetCurrentState(ActionState.CHASE);
+                    }
                 }
 
-                else {
-                    SetCurrentState(ActionState.IDLE);
+                else
+                {
+                    if (walkpoints.Count > 1)
+                    {
+                        Patrol();
+                        SetCurrentState(ActionState.PATROL);
+                    }
+
+                    else
+                    {
+                        SetCurrentState(ActionState.IDLE);
+                    }
                 }
             }
         }
 
-        else {
+        else
+        {
             StopMoving();
         }
 
@@ -107,29 +139,35 @@ public class EnemyAI : MonoBehaviour
         return currentState;
     }
 
-    private void Patrol() {
-        if (Vector3.Distance(transform.position, walkpoints[currentWalkpointIndex].position) < 1f) {
+    private void Patrol()
+    {
+        if (Vector3.Distance(transform.position, walkpoints[currentWalkpointIndex].position) < 1f)
+        {
             currentWalkpointIndex = (currentWalkpointIndex + 1) % walkpoints.Count;
         }
 
         agent.SetDestination(walkpoints[currentWalkpointIndex].position);
     }
 
-    private void StopMoving() {
+    private void StopMoving()
+    {
         agent.isStopped = true;
         GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
     }
 
-    private void ContinueMoving() {
+    private void ContinueMoving()
+    {
         agent.isStopped = false;
 
-        GetComponent<Rigidbody>().constraints = 
-            RigidbodyConstraints.FreezeRotationX 
+        GetComponent<Rigidbody>().constraints =
+            RigidbodyConstraints.FreezeRotationX
             | RigidbodyConstraints.FreezeRotationZ;
     }
 
-    private void SetAnimationBool() {
-        switch (currentState) {
+    private void SetAnimationBool()
+    {
+        switch (currentState)
+        {
             case ActionState.IDLE:
                 animator.SetBool(idleHash, true);
                 animator.SetBool(walkHash, false);
@@ -167,7 +205,7 @@ public class EnemyAI : MonoBehaviour
                 animator.SetBool(attackHash, enemyAttack.isStunned ? false : true);
 
                 StopMoving();
-                
+
                 break;
         }
     }
@@ -175,7 +213,7 @@ public class EnemyAI : MonoBehaviour
     {
         Vector3 directionToPlayer = (playerTransform.position - transform.position).normalized;
         float angleBetweenEnemyAndPlayer = Vector3.Angle(
-            GetComponent<CapsuleCollider>().height * transform.up + transform.forward, 
+            GetComponent<CapsuleCollider>().height * transform.up + transform.forward,
             directionToPlayer);
         return angleBetweenEnemyAndPlayer <= fovAngle / 2f;
     }
