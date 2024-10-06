@@ -14,6 +14,7 @@ public class PlayerLevelScript : MonoBehaviour
     public Slider LevelSlider;
     public RectTransform progressBarFillRect;
     public RectTransform progressBarSliderRect;
+    public ScreenController sc;
 
     void Start()
     {
@@ -52,7 +53,8 @@ public class PlayerLevelScript : MonoBehaviour
         currentPoly -= polyNumber;
         if (currentPoly < 0)
         {
-            if (currentLevel == 1) {
+            if (currentLevel == 1)
+            {
                 currentPoly = 0;
                 return;
             }
@@ -70,7 +72,11 @@ public class PlayerLevelScript : MonoBehaviour
 
     private void LevelUp()
     {
-        if (currentLevel + 1 > maxLevel) { return; }
+        if (currentLevel + 1 > maxLevel)
+        {
+            ShowWin();
+            return;
+        }
         currentLevel++;
 
         currentPoly -= polyRequiredToNextLevel;
@@ -83,7 +89,11 @@ public class PlayerLevelScript : MonoBehaviour
 
     private void LevelDown()
     {
-        if (currentLevel - 1 < 1) { return; }
+        if (currentLevel - 1 < 1)
+        {
+            ShowLose();
+            return;
+        }
         currentLevel--;
 
         polyRequiredToNextLevel /= 1.5f;
@@ -112,5 +122,13 @@ public class PlayerLevelScript : MonoBehaviour
         float widthIncrease = newWidth - oldWidth;
         Vector3 currentPos = progressBarSliderRect.anchoredPosition;
         progressBarSliderRect.anchoredPosition = new Vector3(currentPos.x + widthIncrease, currentPos.y, currentPos.z);
+    }
+    public void ShowWin()
+    {
+        sc.Win();
+    }
+    public void ShowLose()
+    {
+        sc.Lose();
     }
 }
