@@ -35,6 +35,9 @@ public class EnemyAI : MonoBehaviour
     public float attackRange = 2f;
     private PlayerMovement playerMovement;
 
+    [Header("Polygon")]
+    public bool wasStolen;
+    public int stealCount;
 
     private Animator animator;
     private int idleHash, walkHash, runHash, attackHash;
@@ -72,6 +75,10 @@ public class EnemyAI : MonoBehaviour
 
     void Update()
     {
+        if (wasStolen) {
+            Invoke(nameof(DisableWasStolen), 10f);
+        }
+
         if (enemyAttack.isStunned)
         {
             detectedBefore = false;
@@ -80,7 +87,7 @@ public class EnemyAI : MonoBehaviour
             return;
         }
 
-        if (PlayerDetected() || (detectedBefore && Time.time - lastDetectedTime < maxDetectTime))
+        if (PlayerDetected() || (detectedBefore && Time.time - lastDetectedTime < maxDetectTime) || wasStolen)
         {
             if (DistanceToPlayer() <= attackRange)
             {
@@ -294,4 +301,8 @@ public class EnemyAI : MonoBehaviour
         }
     }
     #endregion
+
+    void DisableWasStolen() {
+        wasStolen = false;
+    }
 }

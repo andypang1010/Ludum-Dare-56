@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,7 @@ public class PlayerLevelScript : MonoBehaviour
     public Slider LevelSlider;
     public RectTransform progressBarFillRect;
     public RectTransform progressBarSliderRect;
+
     void Start()
     {
         UpdateProgressBar();
@@ -25,12 +27,15 @@ public class PlayerLevelScript : MonoBehaviour
         {
             GainPoly(20);
         }
-        UpdateProgressBar();
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            LosePoly(20);
+        }
+
+        // UpdateProgressBar();
     }
-    public void UpdateProgressBar()
-    {
-        LevelSlider.value = currentPoly;
-    }
+
     public void GainPoly(int polyNumber)
     {
         currentPoly += polyNumber;
@@ -38,22 +43,71 @@ public class PlayerLevelScript : MonoBehaviour
         {
             LevelUp();
         }
+
+        UpdateProgressBar();
     }
+
+    public void LosePoly(int polyNumber)
+    {
+        currentPoly -= polyNumber;
+        if (currentPoly < 0)
+        {
+            if (currentLevel == 1) {
+                currentPoly = 0;
+                return;
+            }
+
+            LevelDown();
+        }
+
+        UpdateProgressBar();
+    }
+
+    private void UpdateProgressBar()
+    {
+        LevelSlider.value = currentPoly;
+    }
+
     private void LevelUp()
     {
         if (currentLevel + 1 > maxLevel) { return; }
-        currentPoly -= polyRequiredToNextLevel;
         currentLevel++;
+
+        currentPoly -= polyRequiredToNextLevel;
         polyRequiredToNextLevel = 1.5f * polyRequiredToNextLevel;
+
         Debug.Log("Level Up! Now at level " + currentLevel);
         LevelSlider.maxValue = polyRequiredToNextLevel;
-        AdjustProgressBarSize();
+        IncreaseBarSize();
     }
-    
-    public void AdjustProgressBarSize()
+
+    private void LevelDown()
+    {
+        if (currentLevel - 1 < 1) { return; }
+        currentLevel--;
+
+        polyRequiredToNextLevel = polyRequiredToNextLevel / 1.5f;
+        currentPoly = polyRequiredToNextLevel;
+
+        Debug.Log("Level Down! Now at level " + currentLevel);
+        LevelSlider.maxValue = polyRequiredToNextLevel;
+        DecreaseBarSize();
+    }
+
+    private void IncreaseBarSize()
     {
         float oldWidth = progressBarFillRect.sizeDelta.x;
         float newWidth = oldWidth * 1.5f;
+        progressBarFillRect.sizeDelta = new Vector2(newWidth, progressBarFillRect.sizeDelta.y);
+        float widthIncrease = newWidth - oldWidth;
+        Vector3 currentPos = progressBarSliderRect.anchoredPosition;
+        progressBarSliderRect.anchoredPosition = new Vector3(currentPos.x + (widthIncrease), currentPos.y, currentPos.z);
+    }
+
+    private void DecreaseBarSize()
+    {
+        float oldWidth = progressBarFillRect.sizeDelta.x;
+        float newWidth = oldWidth / 1.5f;
         progressBarFillRect.sizeDelta = new Vector2(newWidth, progressBarFillRect.sizeDelta.y);
         float widthIncrease = newWidth - oldWidth;
         Vector3 currentPos = progressBarSliderRect.anchoredPosition;
