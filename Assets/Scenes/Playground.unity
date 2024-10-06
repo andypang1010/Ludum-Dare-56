@@ -2300,6 +2300,7 @@ MonoBehaviour:
   listenRange: 12
   attackRange: 2
   wasStolen: 0
+  stealCount: 25
   exclamationMarkCanvas: {fileID: 1963538899}
 --- !u!195 &470688301
 NavMeshAgent:
@@ -6096,6 +6097,7 @@ MonoBehaviour:
   listenRange: 12
   attackRange: 2
   wasStolen: 0
+  stealCount: 10
   exclamationMarkCanvas: {fileID: 1739323440}
 --- !u!1 &1449513697
 GameObject:
@@ -9178,6 +9180,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stealCollider: {fileID: 919132148722741522}
+  playerLevel: {fileID: 1253458137}
 --- !u!65 &919132148722741522
 BoxCollider:
   m_ObjectHideFlags: 0

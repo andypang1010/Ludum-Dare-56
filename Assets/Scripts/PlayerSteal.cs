@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerSteal : MonoBehaviour
 {
+    public BoxCollider stealCollider;
+    public PlayerLevelScript playerLevel;
     private bool canSteal;
     private bool isStealing;
     private Animator animator;
@@ -12,7 +14,6 @@ public class PlayerSteal : MonoBehaviour
 
     private Rigidbody rb;
     private PlayerMovement playerMovement;
-    public BoxCollider stealCollider;
 
     void Start()
     {
@@ -46,6 +47,7 @@ public class PlayerSteal : MonoBehaviour
         rb.constraints = RigidbodyConstraints.FreezeRotation;
 
         if (currentTarget != null) {
+            playerLevel.GainPoly(currentTarget.stealCount);
             currentTarget.wasStolen = true;
         }
 

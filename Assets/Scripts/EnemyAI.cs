@@ -33,9 +33,11 @@ public class EnemyAI : MonoBehaviour
     public float sightRange = 10f; // Max distance the enemy can see
     public float listenRange = 10f;
     public float attackRange = 2f;
-    public bool wasStolen;
     private PlayerMovement playerMovement;
 
+    [Header("Polygon")]
+    public bool wasStolen;
+    public int stealCount;
 
     private Animator animator;
     private int idleHash, walkHash, runHash, attackHash;
