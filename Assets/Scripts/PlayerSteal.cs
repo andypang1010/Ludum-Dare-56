@@ -8,10 +8,12 @@ public class PlayerSteal : MonoBehaviour
     private bool isStealing;
     private Animator animator;
     private int stealHash;
+    private EnemyAI currentTarget;
 
     private Rigidbody rb;
     private PlayerMovement playerMovement;
     public BoxCollider stealCollider;
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -21,16 +23,12 @@ public class PlayerSteal : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        print(InputController.Instance.GetStealDown()
-        && !isStealing && canSteal
-        && playerMovement.movementState == PlayerMovement.MovementState.IDLE);
-
         if (InputController.Instance.GetStealDown()
         && !isStealing && canSteal
-        && playerMovement.movementState == PlayerMovement.MovementState.IDLE)
+        && (playerMovement.movementState == PlayerMovement.MovementState.IDLE
+        || playerMovement.movementState == PlayerMovement.MovementState.CROUCH))
         {
             animator.SetBool(stealHash, true);
         }
@@ -46,6 +44,11 @@ public class PlayerSteal : MonoBehaviour
     {
         isStealing = false;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
+
+        if (currentTarget != null) {
+            currentTarget.wasStolen = true;
+        }
+
         animator.SetBool(stealHash, false);
     }
 
@@ -58,12 +61,21 @@ public class PlayerSteal : MonoBehaviour
             && (enemyAI.currentState == EnemyAI.ActionState.IDLE || enemyAI.currentState == EnemyAI.ActionState.PATROL))
             {
                 canSteal = true;
+
+                if (isStealing) {
+                    currentTarget = enemyAI;
+                }
+
+                else {
+                    currentTarget = null;
+                }
             }
         }
 
         else
         {
             canSteal = false;
+            currentTarget = null;
         }
     }
 }

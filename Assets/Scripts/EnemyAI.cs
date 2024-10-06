@@ -33,6 +33,7 @@ public class EnemyAI : MonoBehaviour
     public float sightRange = 10f; // Max distance the enemy can see
     public float listenRange = 10f;
     public float attackRange = 2f;
+    public bool wasStolen;
     private PlayerMovement playerMovement;
 
 
@@ -72,6 +73,10 @@ public class EnemyAI : MonoBehaviour
 
     void Update()
     {
+        if (wasStolen) {
+            Invoke(nameof(DisableWasStolen), 10f);
+        }
+
         if (enemyAttack.isStunned)
         {
             detectedBefore = false;
@@ -80,7 +85,7 @@ public class EnemyAI : MonoBehaviour
             return;
         }
 
-        if (PlayerDetected() || (detectedBefore && Time.time - lastDetectedTime < maxDetectTime))
+        if (PlayerDetected() || (detectedBefore && Time.time - lastDetectedTime < maxDetectTime) || wasStolen)
         {
             if (DistanceToPlayer() <= attackRange)
             {
@@ -294,4 +299,8 @@ public class EnemyAI : MonoBehaviour
         }
     }
     #endregion
+
+    void DisableWasStolen() {
+        wasStolen = false;
+    }
 }
