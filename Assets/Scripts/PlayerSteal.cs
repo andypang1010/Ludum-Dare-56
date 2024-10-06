@@ -61,7 +61,8 @@ public class PlayerSteal : MonoBehaviour
             }
         }
 
-        else {
+        else
+        {
             canSteal = false;
         }
     }
