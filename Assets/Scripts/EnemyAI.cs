@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using UnityEditor.Callbacks;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -62,15 +59,13 @@ public class EnemyAI : MonoBehaviour
         if (!enemyAttack.isStunned) {
             
             if (IsPlayerInFieldOfView() && IsPlayerVisible()) {
-                float distanceToPlayer = (playerTransform.position - transform.position).magnitude;
+                float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
 
                 // Attack
                 if (distanceToPlayer <= attackRange)
                 {
                     agent.SetDestination(playerTransform.position);
-
                     SetCurrentState(ActionState.ATTACK);
-                    StopMoving();
                 }
 
                 // Chase
@@ -79,7 +74,6 @@ public class EnemyAI : MonoBehaviour
                     agent.SetDestination(playerTransform.position);
 
                     SetCurrentState(ActionState.CHASE);
-                    ContinueMoving();
                 }
             }
             
@@ -87,15 +81,11 @@ public class EnemyAI : MonoBehaviour
             {
                 if (walkpoints.Count > 1) {
                     Patrol();
-                    ContinueMoving();
-
                     SetCurrentState(ActionState.PATROL);
                 }
 
                 else {
                     SetCurrentState(ActionState.IDLE);
-
-                    StopMoving();
                 }
             }
         }
@@ -146,6 +136,8 @@ public class EnemyAI : MonoBehaviour
                 animator.SetBool(runHash, false);
                 animator.SetBool(attackHash, false);
 
+                StopMoving();
+
                 break;
 
             case ActionState.PATROL:
@@ -153,6 +145,8 @@ public class EnemyAI : MonoBehaviour
                 animator.SetBool(walkHash, true);
                 animator.SetBool(runHash, false);
                 animator.SetBool(attackHash, false);
+
+                ContinueMoving();
 
                 break;
 
@@ -162,35 +156,43 @@ public class EnemyAI : MonoBehaviour
                 animator.SetBool(runHash, true);
                 animator.SetBool(attackHash, false);
 
+                ContinueMoving();
+
                 break;
 
             case ActionState.ATTACK:
                 animator.SetBool(idleHash, false);
                 animator.SetBool(walkHash, false);
                 animator.SetBool(runHash, false);
-                animator.SetBool(attackHash, true);
+                animator.SetBool(attackHash, enemyAttack.isStunned ? false : true);
 
+                StopMoving();
+                
                 break;
         }
     }
     public bool IsPlayerInFieldOfView()
     {
         Vector3 directionToPlayer = (playerTransform.position - transform.position).normalized;
-        float angleBetweenEnemyAndPlayer = Vector3.Angle(transform.forward, directionToPlayer);
+        float angleBetweenEnemyAndPlayer = Vector3.Angle(
+            GetComponent<CapsuleCollider>().height * transform.up + transform.forward, 
+            directionToPlayer);
         return angleBetweenEnemyAndPlayer <= fovAngle / 2f;
     }
 
     public bool IsPlayerVisible()
     {
-        RaycastHit hit;
         Vector3 directionToPlayer = (playerTransform.position - transform.position).normalized;
-        if (Physics.Raycast(transform.position, directionToPlayer, out hit, sightDistance))
+        if (Physics.Raycast(transform.position, directionToPlayer, out RaycastHit hit, sightDistance))
         {
-            if (hit.transform == playerTransform)
+            if (hit.transform.root.gameObject == playerTransform.gameObject)
             {
                 return true;
             }
+
+            return false;
         }
+
         return false;
     }
 }
