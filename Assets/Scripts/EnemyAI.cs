@@ -16,6 +16,10 @@ public class EnemyAI : MonoBehaviour
     [Header("Pathfinding")]
     public ActionState currentState;
     public Transform playerTransform;
+    public Vector3 targetPosition;
+    public float maxDetectTime;
+    private float lastDetectedTime;
+    private bool detectedBefore;
     private NavMeshAgent agent;
 
     [Header("Patrolling")]
@@ -25,20 +29,21 @@ public class EnemyAI : MonoBehaviour
 
     [Header("Sensors")]
     public float fovAngle = 150f; // Field of view angle (90 degrees)
-    public float sightDistance = 10f; // Max distance the enemy can see
-    public float attackRange = 2f;
-
+    public float sightRange = 10f; // Max distance the enemy can see
     public float listenRange = 10f;
+    public float attackRange = 2f;
+    private PlayerMovement playerMovement;
+
 
     private Animator animator;
     private int idleHash, walkHash, runHash, attackHash;
 
     private EnemyAttack enemyAttack;
-    private PlayerMovement.MovementState playerState;
 
     void Start()
     {
         playerTransform = GameObject.Find("PLAYER").transform;
+        playerMovement = GameObject.Find("PLAYER").GetComponent<PlayerMovement>();
 
         agent = GetComponent<NavMeshAgent>();
 
@@ -55,100 +60,163 @@ public class EnemyAI : MonoBehaviour
         homeWalkpoint.transform.position = transform.position;
 
         walkpoints.Add(homeWalkpoint.transform);
+
+        SetCurrentState(ActionState.IDLE);
     }
 
     void Update()
     {
-        playerState = GameObject.Find("PLAYER").GetComponent<PlayerMovement>().GetMovementState();
-        if (!enemyAttack.isStunned)
-        {
-            if (playerState.Equals(PlayerMovement.MovementState.RUN))
-            {
-                float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
-                if (distanceToPlayer <= listenRange)
-                {
-                    if (distanceToPlayer <= attackRange)
-                    {
-                        agent.SetDestination(playerTransform.position);
-                        SetCurrentState(ActionState.ATTACK);
-                    }
-
-                    // Chase
-                    else
-                    {
-                        agent.SetDestination(playerTransform.position);
-
-                        SetCurrentState(ActionState.CHASE);
-                    }
-                }
-            }
-            else
-            {
-
-                if (IsPlayerInFieldOfView() && IsPlayerVisible())
-                {
-                    float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
-
-                    // Attack
-                    if (distanceToPlayer <= attackRange)
-                    {
-                        agent.SetDestination(playerTransform.position);
-                        SetCurrentState(ActionState.ATTACK);
-                    }
-
-                    // Chase
-                    else if (distanceToPlayer <= sightDistance)
-                    {
-                        agent.SetDestination(playerTransform.position);
-
-                        SetCurrentState(ActionState.CHASE);
-                    }
-                }
-
-                else
-                {
-                    if (walkpoints.Count > 1)
-                    {
-                        Patrol();
-                        SetCurrentState(ActionState.PATROL);
-                    }
-
-                    else
-                    {
-                        SetCurrentState(ActionState.IDLE);
-                    }
-                }
-            }
+        if (enemyAttack.isStunned) {
+            detectedBefore = false;
+            StopMoving();
+            SetAnimationBool();
+            return;
         }
 
+        if (PlayerDetected() || (detectedBefore && Time.time - lastDetectedTime < maxDetectTime)) {
+            if (DistanceToPlayer() <= attackRange)
+            {
+                SetCurrentState(ActionState.ATTACK);
+            }
+
+            else
+            {
+                SetCurrentState(ActionState.CHASE);
+            }
+
+            agent.SetDestination(playerTransform.position);
+        }
+
+        // Player not detected
         else
         {
-            StopMoving();
+            // Patrol
+            if (walkpoints.Count > 1)
+            {
+                SetCurrentState(ActionState.PATROL);
+
+                if (detectedBefore && Time.time - lastDetectedTime > maxDetectTime) {
+                    FindNearestPatrolPoint();
+
+                    detectedBefore = false;
+                }
+
+                if (Vector3.Distance(transform.position, walkpoints[currentWalkpointIndex].position) < 1f)
+                {
+                    currentWalkpointIndex = (currentWalkpointIndex + 1) % walkpoints.Count;
+                }
+
+                targetPosition = walkpoints[currentWalkpointIndex].position;
+            }
+
+            // Idle
+            else
+            {
+                SetCurrentState(ActionState.IDLE);
+                targetPosition = transform.position;
+            }
+
+            agent.SetDestination(targetPosition);
         }
 
         SetAnimationBool();
-    }
 
-    public void SetCurrentState(ActionState state)
+    }
+    void SetCurrentState(ActionState state)
     {
         currentState = state;
     }
 
-    public ActionState GetCurrentState()
+    void FindNearestPatrolPoint()
     {
-        return currentState;
-    }
+        Transform closestWalkpoint = null;
+        float closestDistance = float.MaxValue;
 
-    private void Patrol()
-    {
-        if (Vector3.Distance(transform.position, walkpoints[currentWalkpointIndex].position) < 1f)
+        foreach (Transform walkpoint in walkpoints)
         {
-            currentWalkpointIndex = (currentWalkpointIndex + 1) % walkpoints.Count;
+            float distance = Vector3.Distance(walkpoint.position, transform.position);
+
+            if (closestWalkpoint != null)
+            {
+
+                // If closer than previous closest distance
+                if (distance < closestDistance)
+                {
+
+                    // Set as temporary closest patrol point
+                    closestWalkpoint = walkpoint;
+                    closestDistance = distance;
+                }
+            }
+
+            else
+            {
+                closestWalkpoint = walkpoint;
+                closestDistance = distance;
+            }
         }
 
-        agent.SetDestination(walkpoints[currentWalkpointIndex].position);
+        // Go to closest patrol point
+        currentWalkpointIndex = walkpoints.IndexOf(closestWalkpoint);
     }
 
+#region Detection
+    private float DistanceToPlayer() {
+        return Vector3.Distance(transform.position, playerTransform.position);
+    }
+
+    private bool PlayerIsRunning() {
+        return playerMovement.GetMovementState() == PlayerMovement.MovementState.RUN 
+        && playerMovement.GetMoveVelocity().magnitude > 0;
+    }
+
+    private bool PlayerIsWalking() {
+        return playerMovement.GetMovementState() == PlayerMovement.MovementState.WALK 
+        && playerMovement.GetMoveVelocity().magnitude > 0;
+    }
+
+    public bool PlayerInFieldOfView()
+    {
+        Vector3 directionToPlayer = (playerTransform.position - transform.position).normalized;
+        float angleBetweenEnemyAndPlayer = Vector3.Angle(
+            GetComponent<CapsuleCollider>().height * transform.up + transform.forward,
+            directionToPlayer);
+            
+        return angleBetweenEnemyAndPlayer <= fovAngle / 2f;
+    }
+
+    public bool PlayerVisible()
+    {
+        Vector3 directionToPlayer = (playerTransform.position - transform.position).normalized;
+        if (Physics.Raycast(transform.position, directionToPlayer, out RaycastHit hit, sightRange))
+        {
+            if (hit.transform.root.gameObject == playerTransform.gameObject)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        return false;
+    }
+
+    private bool PlayerDetected()
+    {
+        if ((PlayerIsRunning() && DistanceToPlayer() <= listenRange)
+        || (PlayerIsWalking() && DistanceToPlayer() <= listenRange * 0.5f)
+        || (PlayerInFieldOfView() && PlayerVisible() && DistanceToPlayer() <= sightRange)) {
+            detectedBefore = true;
+            lastDetectedTime = Time.time;
+
+            return true;
+        }
+
+        return false;
+    }
+#endregion
+
+#region Animation
     private void StopMoving()
     {
         agent.isStopped = true;
@@ -209,28 +277,5 @@ public class EnemyAI : MonoBehaviour
                 break;
         }
     }
-    public bool IsPlayerInFieldOfView()
-    {
-        Vector3 directionToPlayer = (playerTransform.position - transform.position).normalized;
-        float angleBetweenEnemyAndPlayer = Vector3.Angle(
-            GetComponent<CapsuleCollider>().height * transform.up + transform.forward,
-            directionToPlayer);
-        return angleBetweenEnemyAndPlayer <= fovAngle / 2f;
-    }
-
-    public bool IsPlayerVisible()
-    {
-        Vector3 directionToPlayer = (playerTransform.position - transform.position).normalized;
-        if (Physics.Raycast(transform.position, directionToPlayer, out RaycastHit hit, sightDistance))
-        {
-            if (hit.transform.root.gameObject == playerTransform.gameObject)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        return false;
-    }
+    #endregion
 }
