@@ -1061,7 +1061,7 @@ GameObject:
   - component: {fileID: 196603167}
   - component: {fileID: 196603168}
   m_Layer: 5
-  m_Name: LevelSlider
+  m_Name: Level Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4763,7 +4763,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1130958972
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5062,7 +5062,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameIsPaused: 0
-  pauseMenuUI: {fileID: 0}
+  pauseMenuUI: {fileID: 1130958971}
 --- !u!4 &1253458136
 Transform:
   m_ObjectHideFlags: 0
@@ -8892,6 +8892,7 @@ GameObject:
   - component: {fileID: 919132148722741520}
   - component: {fileID: 919132148722741518}
   - component: {fileID: 919132148722741521}
+  - component: {fileID: 919132148722741523}
   m_Layer: 0
   m_Name: PLAYER
   m_TagString: Player
@@ -9031,6 +9032,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotationSpeed: 2
   cameraTransform: {fileID: 894922858}
+  pauseMenu: {fileID: 1130958971}
 --- !u!114 &919132148722741521
 MonoBehaviour:
   m_ObjectHideFlags: 0

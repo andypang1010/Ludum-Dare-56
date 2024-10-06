@@ -49,6 +49,7 @@ public class PlayerLevelScript : MonoBehaviour
         LevelSlider.maxValue = polyRequiredToNextLevel;
         AdjustProgressBarSize();
     }
+    
     public void AdjustProgressBarSize()
     {
         float oldWidth = progressBarFillRect.sizeDelta.x;
@@ -56,6 +57,6 @@ public class PlayerLevelScript : MonoBehaviour
         progressBarFillRect.sizeDelta = new Vector2(newWidth, progressBarFillRect.sizeDelta.y);
         float widthIncrease = newWidth - oldWidth;
         Vector3 currentPos = progressBarSliderRect.anchoredPosition;
-        progressBarSliderRect.anchoredPosition = new Vector3(currentPos.x + (widthIncrease / 2), currentPos.y, currentPos.z);
+        progressBarSliderRect.anchoredPosition = new Vector3(currentPos.x + (widthIncrease), currentPos.y, currentPos.z);
     }
 }
