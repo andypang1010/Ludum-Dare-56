@@ -23,6 +23,7 @@ public class PauseMenuScript : MonoBehaviour
                 Resume();
                 Debug.Log("Game Resume");
             }
+
             else
             {
                 Pause();
@@ -50,11 +51,14 @@ public class PauseMenuScript : MonoBehaviour
     }
     public void ShowHelp()
     {
+        Time.timeScale = 0f;
+        GameIsPaused = true;
         helpMenuUI.SetActive(true);
         pauseMenuUI.SetActive(false);
     }
     public void HideHelp()
     {
+        Time.timeScale = 0f;
         helpMenuUI.SetActive(false);
         pauseMenuUI.SetActive(true);
     }
