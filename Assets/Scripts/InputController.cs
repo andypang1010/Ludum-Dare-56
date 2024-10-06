@@ -56,6 +56,16 @@ public class InputController : MonoBehaviour
         return Input.GetKeyDown(stealKey);
     }
 
+    public bool GetStealHold()
+    {
+        return Input.GetKey(stealKey);
+    }
+
+    public bool GetStealUp()
+    {
+        return Input.GetKeyUp(stealKey);
+    }
+
     public bool GetParryDown()
     {
         return Input.GetKeyDown(parryKey);
