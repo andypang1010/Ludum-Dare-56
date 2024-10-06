@@ -15,6 +15,7 @@ public class EnemyAI : MonoBehaviour
 
     [Header("Pathfinding")]
     public ActionState currentState;
+    public Transform cameraTransform;
     public Transform playerTransform;
     public Vector3 targetPosition;
     public float maxDetectTime;
@@ -39,6 +40,7 @@ public class EnemyAI : MonoBehaviour
     private int idleHash, walkHash, runHash, attackHash;
 
     private EnemyAttack enemyAttack;
+    public GameObject exclamationMarkCanvas;
 
     void Start()
     {
@@ -62,26 +64,31 @@ public class EnemyAI : MonoBehaviour
         walkpoints.Add(homeWalkpoint.transform);
 
         SetCurrentState(ActionState.IDLE);
+        exclamationMarkCanvas.SetActive(false);
     }
 
     void Update()
     {
-        if (enemyAttack.isStunned) {
+        if (enemyAttack.isStunned)
+        {
             detectedBefore = false;
             StopMoving();
             SetAnimationBool();
             return;
         }
 
-        if (PlayerDetected() || (detectedBefore && Time.time - lastDetectedTime < maxDetectTime)) {
+        if (PlayerDetected() || (detectedBefore && Time.time - lastDetectedTime < maxDetectTime))
+        {
             if (DistanceToPlayer() <= attackRange)
             {
                 SetCurrentState(ActionState.ATTACK);
+                exclamationMarkCanvas.SetActive(true);
             }
 
             else
             {
                 SetCurrentState(ActionState.CHASE);
+                exclamationMarkCanvas.SetActive(true);
             }
 
             agent.SetDestination(playerTransform.position);
@@ -95,7 +102,8 @@ public class EnemyAI : MonoBehaviour
             {
                 SetCurrentState(ActionState.PATROL);
 
-                if (detectedBefore && Time.time - lastDetectedTime > maxDetectTime) {
+                if (detectedBefore && Time.time - lastDetectedTime > maxDetectTime)
+                {
                     FindNearestPatrolPoint();
 
                     detectedBefore = false;
@@ -115,8 +123,10 @@ public class EnemyAI : MonoBehaviour
                 SetCurrentState(ActionState.IDLE);
                 targetPosition = transform.position;
             }
+            exclamationMarkCanvas.SetActive(false);
 
             agent.SetDestination(targetPosition);
+            exclamationMarkCanvas.transform.LookAt(cameraTransform.position + cameraTransform.rotation * Vector3.forward, cameraTransform.rotation * Vector3.up);
         }
 
         SetAnimationBool();
@@ -160,18 +170,21 @@ public class EnemyAI : MonoBehaviour
         currentWalkpointIndex = walkpoints.IndexOf(closestWalkpoint);
     }
 
-#region Detection
-    private float DistanceToPlayer() {
+    #region Detection
+    private float DistanceToPlayer()
+    {
         return Vector3.Distance(transform.position, playerTransform.position);
     }
 
-    private bool PlayerIsRunning() {
-        return playerMovement.GetMovementState() == PlayerMovement.MovementState.RUN 
+    private bool PlayerIsRunning()
+    {
+        return playerMovement.GetMovementState() == PlayerMovement.MovementState.RUN
         && playerMovement.GetMoveVelocity().magnitude > 0;
     }
 
-    private bool PlayerIsWalking() {
-        return playerMovement.GetMovementState() == PlayerMovement.MovementState.WALK 
+    private bool PlayerIsWalking()
+    {
+        return playerMovement.GetMovementState() == PlayerMovement.MovementState.WALK
         && playerMovement.GetMoveVelocity().magnitude > 0;
     }
 
@@ -181,7 +194,7 @@ public class EnemyAI : MonoBehaviour
         float angleBetweenEnemyAndPlayer = Vector3.Angle(
             GetComponent<CapsuleCollider>().height * transform.up + transform.forward,
             directionToPlayer);
-            
+
         return angleBetweenEnemyAndPlayer <= fovAngle / 2f;
     }
 
@@ -205,7 +218,8 @@ public class EnemyAI : MonoBehaviour
     {
         if ((PlayerIsRunning() && DistanceToPlayer() <= listenRange)
         || (PlayerIsWalking() && DistanceToPlayer() <= listenRange * 0.5f)
-        || (PlayerInFieldOfView() && PlayerVisible() && DistanceToPlayer() <= sightRange)) {
+        || (PlayerInFieldOfView() && PlayerVisible() && DistanceToPlayer() <= sightRange))
+        {
             detectedBefore = true;
             lastDetectedTime = Time.time;
 
@@ -214,9 +228,9 @@ public class EnemyAI : MonoBehaviour
 
         return false;
     }
-#endregion
+    #endregion
 
-#region Animation
+    #region Animation
     private void StopMoving()
     {
         agent.isStopped = true;
