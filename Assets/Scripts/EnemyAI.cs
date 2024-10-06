@@ -204,22 +204,26 @@ public class EnemyAI : MonoBehaviour
             GetComponent<CapsuleCollider>().height * transform.up + transform.forward,
             directionToPlayer);
 
+        print("In FOV?: " + (angleBetweenEnemyAndPlayer <= fovAngle / 2f));
         return angleBetweenEnemyAndPlayer <= fovAngle / 2f;
     }
 
     public bool PlayerVisible()
     {
         Vector3 directionToPlayer = (playerTransform.position - transform.position).normalized;
-        if (Physics.Raycast(transform.position, directionToPlayer, out RaycastHit hit, sightRange))
+        if (Physics.Raycast(transform.position + transform.up * 1.7f + transform.forward * 0.2f, directionToPlayer, out RaycastHit hit, sightRange))
         {
+            print("Hit object: " + hit.transform.root.gameObject);
             if (hit.transform.root.gameObject == playerTransform.gameObject)
             {
+                print("Is Visible?: " + true);
                 return true;
             }
-
+            print("Is Visible?: " + false);
             return false;
         }
 
+        print("Is Visible?: " + false);
         return false;
     }
 

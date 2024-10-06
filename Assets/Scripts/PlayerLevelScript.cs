@@ -28,10 +28,10 @@ public class PlayerLevelScript : MonoBehaviour
             GainPoly(20);
         }
 
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            LosePoly(20);
-        }
+        // if (Input.GetKeyDown(KeyCode.G))
+        // {
+        //     LosePoly(20);
+        // }
 
         // UpdateProgressBar();
     }
@@ -74,7 +74,7 @@ public class PlayerLevelScript : MonoBehaviour
         currentLevel++;
 
         currentPoly -= polyRequiredToNextLevel;
-        polyRequiredToNextLevel = 1.5f * polyRequiredToNextLevel;
+        polyRequiredToNextLevel *= 1.5f;
 
         Debug.Log("Level Up! Now at level " + currentLevel);
         LevelSlider.maxValue = polyRequiredToNextLevel;
@@ -86,7 +86,7 @@ public class PlayerLevelScript : MonoBehaviour
         if (currentLevel - 1 < 1) { return; }
         currentLevel--;
 
-        polyRequiredToNextLevel = polyRequiredToNextLevel / 1.5f;
+        polyRequiredToNextLevel /= 1.5f;
         currentPoly = polyRequiredToNextLevel;
 
         Debug.Log("Level Down! Now at level " + currentLevel);
@@ -101,7 +101,7 @@ public class PlayerLevelScript : MonoBehaviour
         progressBarFillRect.sizeDelta = new Vector2(newWidth, progressBarFillRect.sizeDelta.y);
         float widthIncrease = newWidth - oldWidth;
         Vector3 currentPos = progressBarSliderRect.anchoredPosition;
-        progressBarSliderRect.anchoredPosition = new Vector3(currentPos.x + (widthIncrease), currentPos.y, currentPos.z);
+        progressBarSliderRect.anchoredPosition = new Vector3(currentPos.x + widthIncrease, currentPos.y, currentPos.z);
     }
 
     private void DecreaseBarSize()
@@ -111,6 +111,6 @@ public class PlayerLevelScript : MonoBehaviour
         progressBarFillRect.sizeDelta = new Vector2(newWidth, progressBarFillRect.sizeDelta.y);
         float widthIncrease = newWidth - oldWidth;
         Vector3 currentPos = progressBarSliderRect.anchoredPosition;
-        progressBarSliderRect.anchoredPosition = new Vector3(currentPos.x + (widthIncrease), currentPos.y, currentPos.z);
+        progressBarSliderRect.anchoredPosition = new Vector3(currentPos.x + widthIncrease, currentPos.y, currentPos.z);
     }
 }
