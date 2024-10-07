@@ -45,7 +45,10 @@ public class EnemyAI : MonoBehaviour
     private int idleHash, walkHash, runHash, attackHash;
 
     private EnemyAttack enemyAttack;
-    public GameObject exclamationMarkCanvas;
+
+    [Header("UI Elements")]
+    public GameObject UIExclamationMark;
+    public GameObject UISteal;
 
     void Start()
     {
@@ -72,11 +75,13 @@ public class EnemyAI : MonoBehaviour
         walkpoints.Add(homeWalkpoint.transform);
 
         SetCurrentState(ActionState.IDLE);
-        exclamationMarkCanvas.SetActive(false);
+        UIExclamationMark.SetActive(false);
     }
 
     void Update()
     {
+        RotateUI();
+
         if (wasStolen) {
             Invoke(nameof(DisableWasStolen), 10f);
         }
@@ -91,6 +96,8 @@ public class EnemyAI : MonoBehaviour
 
         if (PlayerDetected() || (detectedBefore && Time.time - lastDetectedTime < maxDetectTime) || wasStolen)
         {
+            UISteal.SetActive(false);
+            
             if (DistanceToPlayer() <= attackRange)
             {
                 SetCurrentState(ActionState.ATTACK);
@@ -102,8 +109,7 @@ public class EnemyAI : MonoBehaviour
                 agent.speed = chaseSpeed;
             }
 
-            exclamationMarkCanvas.SetActive(true);
-            exclamationMarkCanvas.transform.LookAt(cameraTransform.position + cameraTransform.rotation * Vector3.forward, Vector3.up);
+            UIExclamationMark.SetActive(true);
             agent.SetDestination(playerTransform.position);
         }
 
@@ -139,12 +145,19 @@ public class EnemyAI : MonoBehaviour
             }
 
             agent.SetDestination(targetPosition);
-            exclamationMarkCanvas.SetActive(false);
+            UIExclamationMark.SetActive(false);
         }
 
         SetAnimationBool();
 
     }
+
+    private void RotateUI()
+    {
+        UIExclamationMark.transform.LookAt(cameraTransform.position + cameraTransform.rotation * Vector3.forward, Vector3.up);
+        UISteal.transform.LookAt(cameraTransform.position + cameraTransform.rotation * Vector3.forward, Vector3.down);
+    }
+
     void SetCurrentState(ActionState state)
     {
         currentState = state;
