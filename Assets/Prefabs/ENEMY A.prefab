@@ -254,7 +254,7 @@ CapsuleCollider:
   m_Radius: 0.35
   m_Height: 1.8
   m_Direction: 1
-  m_Center: {x: 0, y: 0.9, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!54 &7060400680361855140
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -346,8 +346,8 @@ MonoBehaviour:
   walkpoints: []
   currentWalkpointIndex: 0
   fovAngle: 120
-  sightRange: 20
-  listenRange: 12
+  sightRange: 25
+  listenRange: 4.5
   attackRange: 1
   wasStolen: 0
   stealCount: 25

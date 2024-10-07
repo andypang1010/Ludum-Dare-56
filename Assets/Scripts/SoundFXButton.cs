@@ -4,16 +4,23 @@ using UnityEngine;
 
 public class SoundFXButton : MonoBehaviour
 {
-    public AudioSource hoverFxSource; // AudioSource for hover sound
-    public AudioSource clickFxSource; // AudioSource for click sound
+    private AudioSource hoverFxSource;
+    private AudioSource clickFxSource;
+
+    private void Start() {
+        hoverFxSource = GameObject.Find("Button Hover").GetComponent<AudioSource>();
+        clickFxSource = GameObject.Find("Button Click").GetComponent<AudioSource>();
+    }
 
     public void HoverSound()
     {
-        hoverFxSource.Play(); // Play the hover sound
+        if (hoverFxSource != null)
+            hoverFxSource.Play(); // Play the hover sound
     }
 
     public void ClickSound()
     {
-        clickFxSource.Play(); // Play the click sound
+        if (clickFxSource != null)
+            clickFxSource.Play(); // Play the click sound
     }
 }
