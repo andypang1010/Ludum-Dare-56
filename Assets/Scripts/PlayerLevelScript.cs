@@ -28,11 +28,6 @@ public class PlayerLevelScript : MonoBehaviour
     {
         UpdateProgressBar();
         LevelSlider.maxValue = polyRequiredToNextLevel;
-
-        bodies[0].transform.Find("Model").SetParent(transform);
-        bodies[0].transform.Find("mixamorig:Hips").SetParent(transform);
-
-        GetComponent<Animator>().runtimeAnimatorController = animatorControllers[0];
     }
 
     void Update()
