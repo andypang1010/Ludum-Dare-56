@@ -93,7 +93,6 @@ public class PlayerLevelScript : MonoBehaviour
 
         currentPoly -= polyRequiredToNextLevel;
         polyRequiredToNextLevel *= 1.5f;
-
         Debug.Log("Level Up! Now at level " + currentLevel);
         LevelSlider.maxValue = polyRequiredToNextLevel;
     }
