@@ -32,6 +32,7 @@ public class ScreenController : MonoBehaviour
         {
             return;
         }
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (currentState == ScreenState.NORMAL)
@@ -43,6 +44,7 @@ public class ScreenController : MonoBehaviour
                 SetState(ScreenState.NORMAL);
             }
         }
+
         updateMenu();
     }
     public ScreenState getState()

@@ -6,11 +6,19 @@ using UnityEngine.UI;
 
 public class PlayerLevelScript : MonoBehaviour
 {
+
+    [Header("Settings")]
     public int currentLevel = 1;
-    //current Poly(XP value)
-    public static int maxLevel = 5;
+    public int maxLevel = 5;
     public float currentPoly = 0f;
     public float polyRequiredToNextLevel = 100f;
+
+
+    [Header("Meshes")]
+    public GameObject[] bodies;
+    public RuntimeAnimatorController[] animatorControllers;
+
+    [Header("UI")]
     public Slider LevelSlider;
     public RectTransform progressBarFillRect;
     public RectTransform progressBarSliderRect;
@@ -20,6 +28,11 @@ public class PlayerLevelScript : MonoBehaviour
     {
         UpdateProgressBar();
         LevelSlider.maxValue = polyRequiredToNextLevel;
+
+        bodies[0].transform.Find("Model").SetParent(transform);
+        bodies[0].transform.Find("mixamorig:Hips").SetParent(transform);
+
+        GetComponent<Animator>().runtimeAnimatorController = animatorControllers[0];
     }
 
     void Update()
@@ -74,7 +87,9 @@ public class PlayerLevelScript : MonoBehaviour
             ShowWin();
             return;
         }
+
         currentLevel++;
+        UpdateMeshAndRig();
 
         currentPoly -= polyRequiredToNextLevel;
         polyRequiredToNextLevel *= 1.5f;
@@ -91,6 +106,12 @@ public class PlayerLevelScript : MonoBehaviour
             return;
         }
         currentLevel--;
+
+        UpdateMeshAndRig();
+
+        Instantiate(bodies[currentLevel - 1].transform.GetChild(0), transform);
+        Instantiate(bodies[currentLevel - 1].transform.GetChild(1), transform);
+
         polyRequiredToNextLevel /= 1.5f;
         currentPoly = polyRequiredToNextLevel;
         Debug.Log("Level Down! Now at level " + currentLevel);
@@ -103,5 +124,15 @@ public class PlayerLevelScript : MonoBehaviour
     public void ShowLose()
     {
         sc.Lose();
+    }
+
+    private void UpdateMeshAndRig() {
+        transform.Find("Model").SetParent(transform.Find("Level " + (currentLevel - 1) + " Body"));
+        transform.Find("mixamorig:Hips").SetParent(transform.Find("Level " + (currentLevel - 1) + " Body"));
+
+        bodies[currentLevel - 1].transform.Find("Model").SetParent(transform);
+        bodies[currentLevel - 1].transform.Find("mixamorig:Hips").SetParent(transform);
+
+        GetComponent<Animator>().runtimeAnimatorController = animatorControllers[currentLevel - 1];
     }
 }

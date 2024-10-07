@@ -77,6 +77,10 @@ public class PlayerMovement : MonoBehaviour
         horizontalInput = movement.x;
         verticalInput = movement.y;
 
+        if (GetComponent<PlayerLevelScript>().currentLevel < 3) {
+            return;
+        }
+
         if (InputController.Instance.GetCrouchDown())
         {
             Crouch();
@@ -87,7 +91,7 @@ public class PlayerMovement : MonoBehaviour
         if ((!InputController.Instance.GetCrouchHold())
         && !Physics.Raycast(transform.position, Vector3.up, PlayerHeight * 0.5f + 0.2f))
         {
-            GetComponent<CapsuleCollider>().height = PlayerHeight;
+            // GetComponent<CapsuleCollider>().height = PlayerHeight;
             GetComponent<CapsuleCollider>().center = new Vector3(0, 0.9f, 0);
         }
     }
