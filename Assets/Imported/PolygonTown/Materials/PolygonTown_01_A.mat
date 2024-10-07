@@ -27,7 +27,7 @@ Material:
   m_ValidKeywords:
   - _OUTLINETYPE_NORMAL
   - _OVERLAYMODE1_NONE
-  - _OVERLAYMODE_NONE
+  - _OVERLAYMODE_HAFTONE
   - _RIMSPLITCOLOR_NOSPLIT
   - _USEADDITIONALLIGHTSDIFFUSE_ON
   - _USEHATCHINGCONSTANTSCALE_ON
@@ -136,10 +136,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AdaptiveThicnkess: 0
+    - _AdaptiveThicnkess: 0.564
     - _AddPrecomputedVelocity: 0
     - _AdditionalLightsAmount: 1
-    - _AdditionalLightsFaloff: 1
+    - _AdditionalLightsFaloff: 0
     - _AdditionalLightsIntesity: 1
     - _AdditionalLightsSmoothnessMultiplier: 1
     - _AlphaClip: 0
@@ -169,17 +169,17 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.2
     - _GlossyReflections: 1
-    - _HalftoneEdgeOffset: 0.1
-    - _HalftoneSmoothness: 0.3
-    - _HalftoneThreshold: 0.1
-    - _HalftoneToonAffect: 0
+    - _HalftoneEdgeOffset: 0.36
+    - _HalftoneSmoothness: 0
+    - _HalftoneThreshold: 0.0659
+    - _HalftoneToonAffect: 0.302
     - _HaltonePatternSize: 0
     - _IndirectLightAffectOnHatch: 0
     - _IndirectLightStrength: 1
     - _InverseMask: 0
     - _LightRampOffset: 0
     - _Lighten: 0
-    - _MainLightIntesity: 1
+    - _MainLightIntesity: 4.37
     - _MaxScaleDependingOnCamera: 1
     - _Metallic: 0
     - _Mode: 0
@@ -190,7 +190,7 @@ Material:
     - _OutlineNoiseScale: 10
     - _OutlineTextureStrength: 0
     - _OutlineType: 0
-    - _OverlayMode: 0
+    - _OverlayMode: 1
     - _OverlayMode1: 0
     - _OverlayRotation: 0
     - _OverlayUVTilling: 0
@@ -209,7 +209,7 @@ Material:
     - _SideShineHardness: 0
     - _SideShineIntensity: 1
     - _Smoothness: 1
-    - _SmoothnessMultiplier: 1
+    - _SmoothnessMultiplier: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularFaloff: 0
     - _SpecularHighlights: 1
@@ -221,10 +221,10 @@ Material:
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _StepHalftoneTexture: 0
-    - _StepOffset: 0
+    - _StepOffset: -0.127
     - _Strength: 0
     - _Surface: 0
-    - _Thicnkess: 0
+    - _Thicnkess: 0.0041
     - _UVAnimationSpeed: 0
     - _UVAnimationSpeedSpec: 0
     - _UVAnimationSpeedWarp: 0
@@ -265,12 +265,12 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _HalftoneColor: {r: 0, g: 0, b: 0, a: 1}
+    - _HalftoneColor: {r: 0.002254644, g: 0.0022566228, b: 0.012578547, a: 0.1882353}
     - _HatchingColor: {r: 0, g: 0, b: 0, a: 1}
-    - _OutlineColor: {r: 0, g: 0, b: 0, a: 0}
+    - _OutlineColor: {r: 0.6289307, g: 0.25984275, b: 0, a: 0}
     - _RimColor: {r: 1, g: 1, b: 1, a: 0}
-    - _RimShadowColor: {r: 0, g: 0.055514283, b: 0.9622641, a: 0}
-    - _ShadowColor: {r: 0, g: 0, b: 0, a: 0}
+    - _RimShadowColor: {r: 0, g: 0.05714321, b: 1, a: 0}
+    - _ShadowColor: {r: 0.5895731, g: 0.6068125, b: 0.69182384, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
