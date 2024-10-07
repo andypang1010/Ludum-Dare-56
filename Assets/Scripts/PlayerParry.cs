@@ -10,16 +10,21 @@ public class PlayerParry : MonoBehaviour
     private PlayerMovement playerMovement;
     private Rigidbody rb;
     private int parryHash, hitHash;
-    private PlayerLevelScript level;
+
+    [Header("Audio")]
+    public AudioClip parrySuccess;
+    public AudioClip parryFailure;
+    private AudioSource audioSource;
 
     void Start()
     {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         playerMovement = GetComponent<PlayerMovement>();
-        level = GetComponent<PlayerLevelScript>();
         parryCollider = GetComponent<BoxCollider>();
         parryCollider.enabled = false;
+
+        audioSource = GetComponent<AudioSource>();
 
         parryHash = Animator.StringToHash("OnParry");
         hitHash = Animator.StringToHash("OnHit");
@@ -49,6 +54,7 @@ public class PlayerParry : MonoBehaviour
 
     void SuccessfulParry()
     {
+        audioSource.PlayOneShot(parrySuccess);
         EndParry();
     }
 
@@ -64,6 +70,7 @@ public class PlayerParry : MonoBehaviour
     {
         if (isHit) return;
 
+        audioSource.PlayOneShot(parryFailure);
         animator.SetBool(hitHash, true);
     }
 

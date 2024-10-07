@@ -5,6 +5,11 @@ using UnityEngine;
 public class PlayerSteal : MonoBehaviour
 {
     public BoxCollider stealCollider;
+
+    [Header("Audio")]
+    public AudioClip stealClip;
+    private AudioSource audioSource;
+
     private bool canSteal;
     private bool isStealing;
     private Animator animator;
@@ -22,6 +27,8 @@ public class PlayerSteal : MonoBehaviour
         playerLevel = GetComponent<PlayerLevelScript>();
         stealHash = Animator.StringToHash("OnSteal");
 
+        audioSource = GetComponent<AudioSource>();
+
         rb = GetComponent<Rigidbody>();
     }
 
@@ -38,6 +45,7 @@ public class PlayerSteal : MonoBehaviour
 
     void StartSteal()
     {
+        audioSource.PlayOneShot(stealClip);
         isStealing = true;
         rb.constraints = RigidbodyConstraints.FreezeAll;
     }
