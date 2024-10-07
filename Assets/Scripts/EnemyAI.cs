@@ -223,9 +223,6 @@ public class EnemyAI : MonoBehaviour
             playerTransform.position.y * transform.up + transform.forward,
             directionToPlayer);
 
-        // print(angleBetweenEnemyAndPlayer);
-
-        // print("In FOV?: " + ((angleBetweenEnemyAndPlayer % 360) <= fovAngle / 2f));
         return angleBetweenEnemyAndPlayer <= fovAngle / 2f;
     }
 
