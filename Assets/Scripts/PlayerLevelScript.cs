@@ -29,18 +29,18 @@ public class PlayerLevelScript : MonoBehaviour
         UpdateProgressBar();
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            GainPoly(20);
-        }
+    // void Update()
+    // {
+    //     if (Input.GetKeyDown(KeyCode.F))
+    //     {
+    //         GainPoly(20);
+    //     }
 
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            LosePoly(20);
-        }
-    }
+    //     if (Input.GetKeyDown(KeyCode.G))
+    //     {
+    //         LosePoly(20);
+    //     }
+    // }
 
     public void GainPoly(int polyNumber)
     {
