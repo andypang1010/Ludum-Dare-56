@@ -10,13 +10,14 @@ public class PlayerParry : MonoBehaviour
     private PlayerMovement playerMovement;
     private Rigidbody rb;
     private int parryHash, hitHash;
+    private PlayerLevelScript level;
 
     void Start()
     {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         playerMovement = GetComponent<PlayerMovement>();
-
+        level = GetComponent<PlayerLevelScript>();
         parryCollider = GetComponent<BoxCollider>();
         parryCollider.enabled = false;
 
@@ -27,6 +28,7 @@ public class PlayerParry : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (level.currentLevel < 3) { return; }
         if (InputController.Instance.GetParryDown()
         && !isParrying && !isHit
 
@@ -35,7 +37,6 @@ public class PlayerParry : MonoBehaviour
         || playerMovement.movementState == PlayerMovement.MovementState.WALK))
         {
             animator.SetBool(parryHash, true);
-
             return;
         }
     }
@@ -61,18 +62,21 @@ public class PlayerParry : MonoBehaviour
         animator.SetBool(parryHash, false);
     }
 
-    public void Hit() {
+    public void Hit()
+    {
         if (isHit) return;
 
         animator.SetBool(hitHash, true);
     }
 
-    public void StartHit() {
+    public void StartHit()
+    {
         isHit = true;
         rb.constraints = RigidbodyConstraints.FreezeAll;
     }
 
-    public void EndHit() {
+    public void EndHit()
+    {
         isHit = false;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
         animator.SetBool(hitHash, false);
