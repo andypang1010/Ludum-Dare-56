@@ -96,8 +96,10 @@ public class EnemyAI : MonoBehaviour
             return;
         }
 
-        if (PlayerDetected() || (detectedBefore && Time.time - lastDetectedTime < maxDetectTime) || wasStolen)
+        if ((PlayerDetected() || (detectedBefore && Time.time - lastDetectedTime < maxDetectTime) || wasStolen)
+        && playerTransform.root.gameObject.GetComponent<PlayerLevelScript>().currentLevel > 2)
         {
+            
             UISteal.SetActive(false);
 
             if (DistanceToPlayer() <= attackRange)
