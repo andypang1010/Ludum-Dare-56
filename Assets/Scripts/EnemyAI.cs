@@ -20,7 +20,7 @@ public class EnemyAI : MonoBehaviour
     private float lastDetectedTime;
     private bool detectedBefore;
     private NavMeshAgent agent;
-    private Transform playerTransform;
+    private GameObject player;
     private Transform cameraTransform;
 
     [Header("Patrolling")]
@@ -52,7 +52,7 @@ public class EnemyAI : MonoBehaviour
 
     void Start()
     {
-        playerTransform = GameObject.Find("PLAYER").transform;
+        player = GameObject.Find("PLAYER");
         cameraTransform = GameObject.Find("CAMERA").transform;
 
         playerMovement = GameObject.Find("PLAYER").GetComponent<PlayerMovement>();
@@ -97,7 +97,7 @@ public class EnemyAI : MonoBehaviour
         }
 
         if ((PlayerDetected() || (detectedBefore && Time.time - lastDetectedTime < maxDetectTime) || wasStolen)
-        && playerTransform.root.gameObject.GetComponent<PlayerLevelScript>().currentLevel > 2)
+        && player.transform.root.gameObject.GetComponent<PlayerLevelScript>().currentLevel > 2)
         {
             
             UISteal.SetActive(false);
@@ -114,7 +114,7 @@ public class EnemyAI : MonoBehaviour
             }
 
             UIExclamationMark.SetActive(true);
-            agent.SetDestination(playerTransform.position);
+            agent.SetDestination(player.transform.position);
         }
 
         // Player not detected
@@ -203,7 +203,7 @@ public class EnemyAI : MonoBehaviour
     #region Detection
     private float DistanceToPlayer()
     {
-        return Vector3.Distance(transform.position, playerTransform.position);
+        return Vector3.Distance(transform.position, player.transform.position);
     }
 
     private bool PlayerIsRunning()
@@ -220,9 +220,9 @@ public class EnemyAI : MonoBehaviour
 
     public bool PlayerInFieldOfView()
     {
-        Vector3 directionToPlayer = (playerTransform.position - transform.position).normalized;
+        Vector3 directionToPlayer = (player.transform.position - transform.position).normalized;
         float angleBetweenEnemyAndPlayer = Vector3.Angle(
-            playerTransform.position.y * transform.up + transform.forward,
+            player.transform.position.y * transform.up + transform.forward,
             directionToPlayer);
 
         return angleBetweenEnemyAndPlayer <= fovAngle / 2f;
@@ -230,20 +230,20 @@ public class EnemyAI : MonoBehaviour
 
     public bool PlayerVisible()
     {
-        Vector3 directionToPlayer = (playerTransform.position - transform.position).normalized;
+        Vector3 directionToPlayer = (player.transform.position - transform.position).normalized;
         if (Physics.Raycast(transform.position, directionToPlayer, out RaycastHit hit, sightRange, ~LayerMask.GetMask("Enemy")))
         {
-            print("Hit object: " + hit.transform.root.gameObject);
-            if (hit.transform.root.gameObject == playerTransform.gameObject)
+            // print("Hit object: " + hit.transform.root.gameObject);
+            if (hit.transform.root.gameObject == player.transform.gameObject)
             {
-                print("Is Visible?: " + true);
+                // print("Is Visible?: " + true);
                 return true;
             }
-            print("Is Visible?: " + false);
+            // print("Is Visible?: " + false);
             return false;
         }
 
-        print("Is Visible?: " + false);
+        // print("Is Visible?: " + false);
         return false;
     }
 

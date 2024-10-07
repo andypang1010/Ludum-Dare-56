@@ -88,7 +88,6 @@ public class PlayerLevelScript : MonoBehaviour
 
         currentPoly -= polyRequiredToNextLevel;
         polyRequiredToNextLevel *= 1.5f;
-        Debug.Log("Level Up! Now at level " + currentLevel);
         LevelSlider.maxValue = polyRequiredToNextLevel;
     }
 
@@ -96,9 +95,14 @@ public class PlayerLevelScript : MonoBehaviour
     {
         if (currentLevel - 1 < 1)
         {
+            print("YOU LOSE!!!");
             ShowLose();
             return;
+
         }
+
+        Debug.Log("Level Down! Now at level " + currentLevel);
+
         currentLevel--;
 
         UpdateMeshAndRig();
@@ -108,7 +112,6 @@ public class PlayerLevelScript : MonoBehaviour
 
         polyRequiredToNextLevel /= 1.5f;
         currentPoly = polyRequiredToNextLevel;
-        Debug.Log("Level Down! Now at level " + currentLevel);
         LevelSlider.maxValue = polyRequiredToNextLevel;
     }
     public void ShowWin()

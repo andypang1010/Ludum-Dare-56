@@ -5,10 +5,9 @@ using UnityEngine.AI;
 
 public class EnemyAttack : MonoBehaviour
 {
-    public bool isStunned;
-    public CapsuleCollider attackHitbox;
-    public PlayerLevelScript playerLevel;
     public int polyDamage;
+    public CapsuleCollider attackHitbox;
+    [HideInInspector] public bool isStunned;
     private Animator animator;
     private bool canParry;
     private int stunnedHash;
@@ -55,9 +54,8 @@ public class EnemyAttack : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) {
         if (other.transform.root.gameObject.CompareTag("Player") && !other.isTrigger) {
-            playerLevel.LosePoly(polyDamage);
+            other.transform.root.GetComponent<PlayerLevelScript>().LosePoly(polyDamage);
             other.transform.root.GetComponent<PlayerParry>().Hit();
-            // print("Hit");
         }
     }
 }
