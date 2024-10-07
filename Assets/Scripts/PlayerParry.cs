@@ -28,7 +28,6 @@ public class PlayerParry : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (level.currentLevel < 3) { return; }
         if (InputController.Instance.GetParryDown()
         && !isParrying && !isHit
 
@@ -48,13 +47,12 @@ public class PlayerParry : MonoBehaviour
         parryCollider.enabled = true;
     }
 
-    public void SuccessfulParry()
+    void SuccessfulParry()
     {
-        // Debug.Log("Parry Successful!");
         EndParry();
     }
 
-    public void EndParry()
+    void EndParry()
     {
         isParrying = false;
         rb.constraints = RigidbodyConstraints.FreezeRotation;

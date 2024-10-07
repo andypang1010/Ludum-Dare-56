@@ -96,8 +96,7 @@ public class EnemyAI : MonoBehaviour
             return;
         }
 
-        if ((PlayerDetected() || (detectedBefore && Time.time - lastDetectedTime < maxDetectTime) || wasStolen)
-        && player.transform.root.gameObject.GetComponent<PlayerLevelScript>().currentLevel > 2)
+        if (PlayerDetected() || (detectedBefore && Time.time - lastDetectedTime < maxDetectTime) || wasStolen)
         {
             
             UISteal.SetActive(false);
