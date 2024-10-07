@@ -44,7 +44,6 @@ public class PlayerLevelScript : MonoBehaviour
         {
             LevelUp();
         }
-
         UpdateProgressBar();
     }
 
@@ -58,10 +57,8 @@ public class PlayerLevelScript : MonoBehaviour
                 currentPoly = 0;
                 return;
             }
-
             LevelDown();
         }
-
         UpdateProgressBar();
     }
 
@@ -84,7 +81,6 @@ public class PlayerLevelScript : MonoBehaviour
 
         Debug.Log("Level Up! Now at level " + currentLevel);
         LevelSlider.maxValue = polyRequiredToNextLevel;
-        IncreaseBarSize();
     }
 
     private void LevelDown()
@@ -95,33 +91,10 @@ public class PlayerLevelScript : MonoBehaviour
             return;
         }
         currentLevel--;
-
         polyRequiredToNextLevel /= 1.5f;
         currentPoly = polyRequiredToNextLevel;
-
         Debug.Log("Level Down! Now at level " + currentLevel);
         LevelSlider.maxValue = polyRequiredToNextLevel;
-        DecreaseBarSize();
-    }
-
-    private void IncreaseBarSize()
-    {
-        float oldWidth = progressBarFillRect.sizeDelta.x;
-        float newWidth = oldWidth * 1.5f;
-        progressBarFillRect.sizeDelta = new Vector2(newWidth, progressBarFillRect.sizeDelta.y);
-        float widthIncrease = newWidth - oldWidth;
-        Vector3 currentPos = progressBarSliderRect.anchoredPosition;
-        progressBarSliderRect.anchoredPosition = new Vector3(currentPos.x + widthIncrease, currentPos.y, currentPos.z);
-    }
-
-    private void DecreaseBarSize()
-    {
-        float oldWidth = progressBarFillRect.sizeDelta.x;
-        float newWidth = oldWidth / 1.5f;
-        progressBarFillRect.sizeDelta = new Vector2(newWidth, progressBarFillRect.sizeDelta.y);
-        float widthIncrease = newWidth - oldWidth;
-        Vector3 currentPos = progressBarSliderRect.anchoredPosition;
-        progressBarSliderRect.anchoredPosition = new Vector3(currentPos.x + widthIncrease, currentPos.y, currentPos.z);
     }
     public void ShowWin()
     {
