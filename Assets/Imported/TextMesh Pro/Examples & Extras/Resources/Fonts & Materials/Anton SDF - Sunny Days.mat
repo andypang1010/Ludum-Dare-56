@@ -8,10 +8,13 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Anton SDF - Sunny Days
-  m_Shader: {fileID: 4800000, guid: dd63f044e3b25be4aa593dd5946a36f5, type: 3}
+  m_Shader: {fileID: 4800000, guid: 128e987d567d4e2c824d754223b3f3b0, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
+  m_ValidKeywords: []
+  m_InvalidKeywords:
+  - BEVEL_ON
+  - UNDERLAY_ON
   - _OUTLINETYPE_NORMAL
   - _OVERLAYMODE1_NONE
   - _OVERLAYMODE_NONE
@@ -20,11 +23,8 @@ Material:
   - _USEHATCHINGCONSTANTSCALE_ON
   - _USELIGHTRAMP_STEP
   - _USEPURESKETCH_ON
-  - _USESPECULAR_ON
-  m_InvalidKeywords:
-  - BEVEL_ON
-  - UNDERLAY_ON
   - _USESHADOWS_ON
+  - _USESPECULAR_ON
   m_LightmapFlags: 5
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -128,6 +128,7 @@ Material:
     - _BumpFace: 0
     - _BumpOutline: 0
     - _ColorMask: 15
+    - _CullMode: 0
     - _Cutoff: 0
     - _Darken: 0
     - _Diffuse: 0.5
@@ -249,6 +250,7 @@ Material:
     - _UseShadows: 1
     - _UseSpecular: 1
     - _UseSpecularMask: 0
+    - _UseUIAlphaClip: 0
     - _VertexOffsetX: 0
     - _VertexOffsetY: 0
     - _WarpStrength: 0

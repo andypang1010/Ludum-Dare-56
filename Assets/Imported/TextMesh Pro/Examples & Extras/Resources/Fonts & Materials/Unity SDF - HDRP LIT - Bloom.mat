@@ -8,26 +8,26 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Unity SDF - HDRP LIT - Bloom
-  m_Shader: {fileID: 4800000, guid: dd63f044e3b25be4aa593dd5946a36f5, type: 3}
+  m_Shader: {fileID: 4800000, guid: 128e987d567d4e2c824d754223b3f3b0, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _OUTLINETYPE_NORMAL
-  - _OVERLAYMODE1_NONE
-  - _OVERLAYMODE_NONE
-  - _RIMSPLITCOLOR_NOSPLIT
-  - _USEADDITIONALLIGHTSDIFFUSE_ON
-  - _USEHATCHINGCONSTANTSCALE_ON
-  - _USELIGHTRAMP_STEP
-  - _USEPURESKETCH_ON
-  - _USESPECULAR_ON
+  m_ValidKeywords: []
   m_InvalidKeywords:
   - _ALPHATEST_ON
   - _DISABLE_SSR_TRANSPARENT
   - _DOUBLESIDED_ON
   - _ENABLE_FOG_ON_TRANSPARENT
+  - _OUTLINETYPE_NORMAL
+  - _OVERLAYMODE1_NONE
+  - _OVERLAYMODE_NONE
+  - _RIMSPLITCOLOR_NOSPLIT
   - _SURFACE_TYPE_TRANSPARENT
+  - _USEADDITIONALLIGHTSDIFFUSE_ON
+  - _USEHATCHINGCONSTANTSCALE_ON
+  - _USELIGHTRAMP_STEP
+  - _USEPURESKETCH_ON
   - _USESHADOWS_ON
+  - _USESPECULAR_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 1
@@ -303,6 +303,7 @@ Material:
     - _UseShadows: 1
     - _UseSpecular: 1
     - _UseSpecularMask: 0
+    - _UseUIAlphaClip: 0
     - _VertexOffsetX: 0
     - _VertexOffsetY: 0
     - _WarpStrength: 0
