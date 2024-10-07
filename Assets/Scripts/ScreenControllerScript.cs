@@ -68,7 +68,7 @@ public class ScreenController : MonoBehaviour
 
     public void ExitToMainMenu()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+        SceneManager.LoadScene("Main Menu");
     }
     public void getHelp()
     {
