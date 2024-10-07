@@ -11,7 +11,7 @@ public class PlayerLevelScript : MonoBehaviour
     public int currentLevel = 1;
     public int maxLevel = 5;
     public float currentPoly = 0f;
-    public float polyRequiredToNextLevel = 100f;
+    public int polyRequiredToNextLevel = 100;
 
 
     [Header("Meshes")]
@@ -27,7 +27,6 @@ public class PlayerLevelScript : MonoBehaviour
     void Start()
     {
         UpdateProgressBar();
-        LevelSlider.maxValue = polyRequiredToNextLevel;
     }
 
     void Update()
@@ -37,45 +36,48 @@ public class PlayerLevelScript : MonoBehaviour
             GainPoly(20);
         }
 
-        // if (Input.GetKeyDown(KeyCode.G))
-        // {
-        //     LosePoly(20);
-        // }
-
-        // UpdateProgressBar();
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            LosePoly(20);
+        }
     }
 
     public void GainPoly(int polyNumber)
     {
-        currentPoly += polyNumber;
-        if (currentPoly >= polyRequiredToNextLevel)
+        if (currentPoly + polyNumber > polyRequiredToNextLevel)
         {
-            LevelUp();
+            LevelUp(polyNumber);
         }
+
+        else {
+            currentPoly += polyNumber;
+        }
+
         UpdateProgressBar();
     }
 
     public void LosePoly(int polyNumber)
     {
-        currentPoly -= polyNumber;
-        if (currentPoly < 0)
+        if (currentPoly - polyNumber < 0)
         {
-            if (currentLevel == 1)
-            {
-                currentPoly = 0;
-                return;
-            }
-            LevelDown();
+            LevelDown(polyNumber);
         }
+
+        else {
+            currentPoly -= polyNumber;
+        }
+
         UpdateProgressBar();
     }
 
     private void UpdateProgressBar()
     {
+        // print("Updated progress bar");
         LevelSlider.value = currentPoly;
+        LevelSlider.maxValue = polyRequiredToNextLevel;
     }
 
-    private void LevelUp()
+    private void LevelUp(int polyNumber)
     {
         if (currentLevel + 1 > maxLevel)
         {
@@ -84,52 +86,55 @@ public class PlayerLevelScript : MonoBehaviour
         }
 
         currentLevel++;
-        UpdateMeshAndRig();
+        UpgradeModelAndRig();
 
-        currentPoly -= polyRequiredToNextLevel;
-        polyRequiredToNextLevel *= 1.5f;
-        LevelSlider.maxValue = polyRequiredToNextLevel;
+
+        currentPoly += polyNumber - polyRequiredToNextLevel;
+        polyRequiredToNextLevel = (int) (polyRequiredToNextLevel * 1.5f);
     }
 
-    private void LevelDown()
+    private void LevelDown(int polyNumber)
     {
-        if (currentLevel - 1 < 1)
-        {
-            print("YOU LOSE!!!");
-            ShowLose();
-            return;
-
-        }
-
-        Debug.Log("Level Down! Now at level " + currentLevel);
+        if (currentLevel - 1 < 1) return;
 
         currentLevel--;
+        DowngradeModelAndRig();
 
-        UpdateMeshAndRig();
 
-        Instantiate(bodies[currentLevel - 1].transform.GetChild(0), transform);
-        Instantiate(bodies[currentLevel - 1].transform.GetChild(1), transform);
-
-        polyRequiredToNextLevel /= 1.5f;
-        currentPoly = polyRequiredToNextLevel;
-        LevelSlider.maxValue = polyRequiredToNextLevel;
+        polyRequiredToNextLevel = (int) (polyRequiredToNextLevel / 1.5f);
+        currentPoly += polyRequiredToNextLevel - polyNumber;
     }
+
     public void ShowWin()
     {
         sc.Win();
     }
-    public void ShowLose()
-    {
-        sc.Lose();
-    }
 
-    private void UpdateMeshAndRig() {
+    private void UpgradeModelAndRig()
+    {
+        // print("Storing old model to -> LEVEL " + (currentLevel - 1) + " BODY");
         transform.Find("Model").SetParent(transform.Find("Level " + (currentLevel - 1) + " Body"));
         transform.Find("mixamorig:Hips").SetParent(transform.Find("Level " + (currentLevel - 1) + " Body"));
 
-        bodies[currentLevel - 1].transform.Find("Model").SetParent(transform);
-        bodies[currentLevel - 1].transform.Find("mixamorig:Hips").SetParent(transform);
+        int currentIndex = currentLevel - 1;
 
-        GetComponent<Animator>().runtimeAnimatorController = animatorControllers[currentLevel - 1];
+        bodies[currentIndex].transform.Find("Model").SetParent(transform);
+        bodies[currentIndex].transform.Find("mixamorig:Hips").SetParent(transform);
+
+        GetComponent<Animator>().runtimeAnimatorController = animatorControllers[currentIndex];
+    }
+
+    private void DowngradeModelAndRig()
+    {
+        // print("Storing old model to -> LEVEL " + (currentLevel + 1) + " BODY");
+        transform.Find("Model").SetParent(transform.Find("Level " + (currentLevel + 1) + " Body"));
+        transform.Find("mixamorig:Hips").SetParent(transform.Find("Level " + (currentLevel + 1) + " Body"));
+
+        int currentIndex = currentLevel - 1;
+
+        bodies[currentIndex].transform.Find("Model").SetParent(transform);
+        bodies[currentIndex].transform.Find("mixamorig:Hips").SetParent(transform);
+
+        GetComponent<Animator>().runtimeAnimatorController = animatorControllers[currentIndex];
     }
 }
