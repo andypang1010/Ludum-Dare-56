@@ -90,6 +90,7 @@ public class PlayerParry : MonoBehaviour
             && isParrying == true)
             {
                 SuccessfulParry();
+                GetComponent<PlayerLevelScript>().GainPoly(2 * enemyAttack.polyDamage);
                 enemyAttack.isStunned = true;
             }
         }
