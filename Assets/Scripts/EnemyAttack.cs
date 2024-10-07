@@ -12,10 +12,16 @@ public class EnemyAttack : MonoBehaviour
     private bool canParry;
     private int stunnedHash;
 
+    [Header("Audio")]
+    public AudioClip attackClip;
+    private AudioSource audioSource;
+
     void Start()
     {
         animator = GetComponent<Animator>();
         stunnedHash = Animator.StringToHash("OnStunned");
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -37,6 +43,7 @@ public class EnemyAttack : MonoBehaviour
     }
 
     void AttackStart() {
+        audioSource.PlayOneShot(attackClip);
         attackHitbox.enabled = true;
     }
 
