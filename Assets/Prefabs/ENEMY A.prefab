@@ -346,8 +346,8 @@ MonoBehaviour:
   walkpoints: []
   currentWalkpointIndex: 0
   fovAngle: 120
-  sightRange: 20
-  listenRange: 12
+  sightRange: 25
+  listenRange: 4.5
   attackRange: 1
   wasStolen: 0
   stealCount: 25
