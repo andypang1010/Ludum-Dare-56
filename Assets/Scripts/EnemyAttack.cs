@@ -56,7 +56,8 @@ public class EnemyAttack : MonoBehaviour
     private void OnTriggerEnter(Collider other) {
         if (other.transform.root.gameObject.CompareTag("Player") && !other.isTrigger) {
             playerLevel.LosePoly(polyDamage);
-            print("Hit");
+            other.transform.root.GetComponent<PlayerParry>().Hit();
+            // print("Hit");
         }
     }
 }

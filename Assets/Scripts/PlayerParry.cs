@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class PlayerParry : MonoBehaviour
 {
-    private bool isParrying;
+    public BoxCollider parryCollider;
+    private bool isParrying, isHit;
     private Animator animator;
     private PlayerMovement playerMovement;
-    public BoxCollider parryCollider;
     private Rigidbody rb;
-    private int parryHash;
+    private int parryHash, hitHash;
 
     void Start()
     {
@@ -21,13 +21,14 @@ public class PlayerParry : MonoBehaviour
         parryCollider.enabled = false;
 
         parryHash = Animator.StringToHash("OnParry");
+        hitHash = Animator.StringToHash("OnHit");
     }
 
     // Update is called once per frame
     void Update()
     {
         if (InputController.Instance.GetParryDown()
-        && !isParrying
+        && !isParrying && !isHit
 
         // Check if player can parry
         && (playerMovement.movementState == PlayerMovement.MovementState.IDLE
@@ -58,6 +59,23 @@ public class PlayerParry : MonoBehaviour
         rb.constraints = RigidbodyConstraints.FreezeRotation;
         parryCollider.enabled = false;
         animator.SetBool(parryHash, false);
+    }
+
+    public void Hit() {
+        if (isHit) return;
+
+        animator.SetBool(hitHash, true);
+    }
+
+    public void StartHit() {
+        isHit = true;
+        rb.constraints = RigidbodyConstraints.FreezeAll;
+    }
+
+    public void EndHit() {
+        isHit = false;
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
+        animator.SetBool(hitHash, false);
     }
 
     private void OnTriggerStay(Collider other)
