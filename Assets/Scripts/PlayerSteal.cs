@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlayerSteal : MonoBehaviour
 {
     public BoxCollider stealCollider;
-    public PlayerLevelScript playerLevel;
     private bool canSteal;
     private bool isStealing;
     private Animator animator;
@@ -14,11 +13,13 @@ public class PlayerSteal : MonoBehaviour
 
     private Rigidbody rb;
     private PlayerMovement playerMovement;
+    private PlayerLevelScript playerLevel;
 
     void Start()
     {
         animator = GetComponent<Animator>();
         playerMovement = GetComponent<PlayerMovement>();
+        playerLevel = GetComponent<PlayerLevelScript>();
         stealHash = Animator.StringToHash("OnSteal");
 
         rb = GetComponent<Rigidbody>();
@@ -66,10 +67,12 @@ public class PlayerSteal : MonoBehaviour
 
                 if (isStealing) {
                     currentTarget = enemyAI;
+                    enemyAI.UISteal.SetActive(false);
                 }
 
                 else {
                     currentTarget = null;
+                    enemyAI.UISteal.SetActive(true);
                 }
             }
         }
