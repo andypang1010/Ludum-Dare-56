@@ -27,7 +27,7 @@ Material:
   m_ValidKeywords:
   - _OUTLINETYPE_NORMAL
   - _OVERLAYMODE1_NONE
-  - _OVERLAYMODE_NONE
+  - _OVERLAYMODE_HAFTONE
   - _RIMSPLITCOLOR_NOSPLIT
   - _USEADDITIONALLIGHTSDIFFUSE_ON
   - _USEHATCHINGCONSTANTSCALE_ON
@@ -190,7 +190,7 @@ Material:
     - _OutlineNoiseScale: 10
     - _OutlineTextureStrength: 0
     - _OutlineType: 0
-    - _OverlayMode: 0
+    - _OverlayMode: 1
     - _OverlayMode1: 0
     - _OverlayRotation: 0
     - _OverlayUVTilling: 0
@@ -265,7 +265,7 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _HalftoneColor: {r: 0, g: 0, b: 0, a: 1}
+    - _HalftoneColor: {r: 0, g: 0, b: 0, a: 0.21568628}
     - _HatchingColor: {r: 0, g: 0, b: 0, a: 1}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 0}
     - _RimColor: {r: 1, g: 1, b: 1, a: 0}

@@ -14,7 +14,7 @@ Material:
   m_ValidKeywords:
   - _OUTLINETYPE_NORMAL
   - _OVERLAYMODE1_NONE
-  - _OVERLAYMODE_NONE
+  - _OVERLAYMODE_HAFTONE
   - _RIMSPLITCOLOR_NOSPLIT
   - _USEADDITIONALLIGHTSDIFFUSE_ON
   - _USEHATCHINGCONSTANTSCALE_ON
@@ -204,12 +204,12 @@ Material:
     - _HalfToneIncludeReceivedShadow: 0
     - _HalfToneShape: 0
     - _HalfToneUvMode: 0
-    - _HalftoneEdgeOffset: 0.1
+    - _HalftoneEdgeOffset: -1
     - _HalftoneFadeDistance: 10
     - _HalftoneFadeToColor: 0
     - _HalftoneNoiseClip: 0.8
-    - _HalftoneSmoothness: 0.3
-    - _HalftoneThreshold: 0.1
+    - _HalftoneSmoothness: 0.62
+    - _HalftoneThreshold: 0.077
     - _HalftoneTilling: 8
     - _HalftoneToonAffect: 0
     - _HaltonePatternSize: 0
@@ -239,7 +239,7 @@ Material:
     - _OutlineTextureStrength: 0
     - _OutlineType: 0
     - _OutlineWidth: 0
-    - _OverlayMode: 0
+    - _OverlayMode: 1
     - _OverlayMode1: 0
     - _OverlayRotation: 0
     - _OverlayUVTilling: 0
@@ -335,7 +335,7 @@ Material:
     - _FaceRightDirection: {r: 1, g: 0, b: 0, a: 0}
     - _HairSpecColor: {r: 0, g: 0, b: 0, a: 1}
     - _HalfToneColor: {r: 0, g: 0, b: 0, a: 1}
-    - _HalftoneColor: {r: 0, g: 0, b: 0, a: 1}
+    - _HalftoneColor: {r: 0, g: 0, b: 0, a: 0.42745098}
     - _HatchingColor: {r: 0, g: 0, b: 0, a: 1}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
     - _OutlineDistancFade: {r: -25, g: 50, b: 0, a: 0}

@@ -8,27 +8,18 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Veh_Glass
-  m_Shader: {fileID: 4800000, guid: dd63f044e3b25be4aa593dd5946a36f5, type: 3}
+  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _OUTLINETYPE_NORMAL
-  - _OVERLAYMODE1_NONE
-  - _OVERLAYMODE_NONE
-  - _RIMSPLITCOLOR_NOSPLIT
-  - _USEADDITIONALLIGHTSDIFFUSE_ON
-  - _USEHATCHINGCONSTANTSCALE_ON
-  - _USELIGHTRAMP_STEP
-  - _USEPURESKETCH_ON
-  - _USESPECULAR_ON
-  m_InvalidKeywords:
   - _SURFACE_TYPE_TRANSPARENT
-  - _USESHADOWS_ON
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
+  m_CustomRenderQueue: 3000
+  stringTagMap:
+    RenderType: Transparent
   disabledShaderPasses:
   - MOTIONVECTORS
   - DepthOnly
@@ -249,8 +240,8 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 0
     m_Colors:
-    - _BaseColor: {r: 0.33742425, g: 0.48014098, b: 0.58088225, a: 0.334}
-    - _Color: {r: 0.3374242, g: 0.48014098, b: 0.58088225, a: 0.334}
+    - _BaseColor: {r: 0.57244563, g: 0.76713294, b: 0.9056604, a: 0}
+    - _Color: {r: 0.57244563, g: 0.76713294, b: 0.9056604, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _HalftoneColor: {r: 0, g: 0, b: 0, a: 1}
     - _HatchingColor: {r: 0, g: 0, b: 0, a: 1}
