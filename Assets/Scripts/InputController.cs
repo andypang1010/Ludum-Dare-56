@@ -8,7 +8,6 @@ public class InputController : MonoBehaviour
 
     public KeyCode sprintKey = KeyCode.LeftShift;
     public KeyCode crouchKey = KeyCode.LeftControl;
-    public KeyCode altCrouchKey = KeyCode.LeftCommand;
     public KeyCode stealKey = KeyCode.E;
     public KeyCode parryKey = KeyCode.Space;
 
@@ -38,17 +37,17 @@ public class InputController : MonoBehaviour
 
     public bool GetCrouchDown()
     {
-        return Input.GetKeyDown(crouchKey) ^ Input.GetKeyDown(altCrouchKey);
+        return Input.GetKeyDown(crouchKey);
     }
 
     public bool GetCrouchHold()
     {
-        return Input.GetKey(crouchKey) ^ Input.GetKey(altCrouchKey);
+        return Input.GetKey(crouchKey);
     }
 
     public bool GetCrouchUp()
     {
-        return Input.GetKeyUp(crouchKey) ^ Input.GetKeyUp(altCrouchKey);
+        return Input.GetKeyUp(crouchKey);
     }
 
     public bool GetStealDown()
