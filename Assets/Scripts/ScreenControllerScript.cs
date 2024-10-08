@@ -28,6 +28,13 @@ public class ScreenController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (currentState == ScreenState.NORMAL) {
+            Cursor.visible = false;
+        }
+
+        else {
+            Cursor.visible = true;
+        }
         if (currentState == ScreenState.WIN || currentState == ScreenState.LOSE)
         {
             return;
