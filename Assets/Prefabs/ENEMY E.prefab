@@ -157,7 +157,7 @@ MonoBehaviour:
   fovAngle: 120
   sightRange: 25
   listenRange: 4.5
-  attackRange: 1
+  attackRange: 1.1
   wasStolen: 0
   stealCount: 25
   UIExclamationMark: {fileID: 6411530998518015511}

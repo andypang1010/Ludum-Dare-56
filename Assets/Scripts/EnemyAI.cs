@@ -28,7 +28,7 @@ public class EnemyAI : MonoBehaviour
     public float chaseSpeed;
     public List<Transform> walkpoints;
     public int currentWalkpointIndex = 0;
-
+    public float maxRotationSpeed = 180;
 
     [Header("Sensors")]
     public float fovAngle = 150f; // Field of view angle (90 degrees)
@@ -101,9 +101,12 @@ public class EnemyAI : MonoBehaviour
             
             UISteal.SetActive(false);
 
+            print(DistanceToPlayer() + "; CanAttack == " + (DistanceToPlayer() <= attackRange));
+ 
             if (DistanceToPlayer() <= attackRange)
             {
                 SetCurrentState(ActionState.ATTACK);
+                TurnToPlayer();
             }
 
             else
@@ -200,24 +203,24 @@ public class EnemyAI : MonoBehaviour
     }
 
     #region Detection
-    private float DistanceToPlayer()
+    float DistanceToPlayer()
     {
         return Vector3.Distance(transform.position, player.transform.position);
     }
 
-    private bool PlayerIsRunning()
+    bool PlayerIsRunning()
     {
         return playerMovement.GetMovementState() == PlayerMovement.MovementState.RUN
         && playerMovement.GetMoveVelocity().magnitude > 0;
     }
 
-    private bool PlayerIsWalking()
+    bool PlayerIsWalking()
     {
         return playerMovement.GetMovementState() == PlayerMovement.MovementState.WALK
         && playerMovement.GetMoveVelocity().magnitude > 0;
     }
 
-    public bool PlayerInFieldOfView()
+    bool PlayerInFieldOfView()
     {
         Vector3 directionToPlayer = (player.transform.position - transform.position).normalized;
         float angleBetweenEnemyAndPlayer = Vector3.Angle(
@@ -227,7 +230,7 @@ public class EnemyAI : MonoBehaviour
         return angleBetweenEnemyAndPlayer <= fovAngle / 2f;
     }
 
-    public bool PlayerVisible()
+    bool PlayerVisible()
     {
         Vector3 directionToPlayer = (player.transform.position - transform.position).normalized;
         if (Physics.Raycast(transform.position, directionToPlayer, out RaycastHit hit, sightRange, ~LayerMask.GetMask("Enemy")))
@@ -246,7 +249,7 @@ public class EnemyAI : MonoBehaviour
         return false;
     }
 
-    private bool PlayerDetected()
+    bool PlayerDetected()
     {
         if ((PlayerInFieldOfView() && PlayerVisible() && DistanceToPlayer() <= sightRange)
         || (PlayerIsRunning() && DistanceToPlayer() <= listenRange)
@@ -267,7 +270,7 @@ public class EnemyAI : MonoBehaviour
     private void StopMoving()
     {
         agent.isStopped = true;
-        GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
     }
 
     private void ContinueMoving()
@@ -323,6 +326,19 @@ public class EnemyAI : MonoBehaviour
 
                 break;
         }
+    }
+
+    void TurnToPlayer() {
+        // Calculate the angular distance between the current and target rotation
+            Vector3 playerDirection = (player.transform.position - transform.position).normalized;
+            Quaternion targetRotation = Quaternion.LookRotation(playerDirection, Vector3.up);
+            float angle = Quaternion.Angle(transform.rotation, targetRotation);
+
+            // Calculate the maximum possible rotation step for this frame
+            float maxRotationStep = maxRotationSpeed * Time.deltaTime;
+
+            // Interpolate between the current and target rotation
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Mathf.Min(1f, maxRotationStep / angle));
     }
     #endregion
 
