@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerParry : MonoBehaviour
 {
-    public BoxCollider parryCollider;
+    public Collider parryCollider;
     private bool isParrying, isHit;
     private Animator animator;
     private PlayerMovement playerMovement;

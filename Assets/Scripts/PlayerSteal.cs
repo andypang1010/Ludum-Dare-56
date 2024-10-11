@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerSteal : MonoBehaviour
 {
-    public BoxCollider stealCollider;
+    public Collider stealCollider;
 
     [Header("Audio")]
     public AudioClip stealClip;
@@ -34,6 +34,8 @@ public class PlayerSteal : MonoBehaviour
 
     void Update()
     {
+        // print("Can Steal?: " + canSteal);
+
         if (InputController.Instance.GetStealDown()
         && !isStealing && canSteal
         && (playerMovement.movementState == PlayerMovement.MovementState.IDLE
@@ -65,13 +67,19 @@ public class PlayerSteal : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.transform.root.CompareTag("Enemy"))
+        if (other.gameObject.CompareTag("Enemy") && !other.isTrigger)
         {
-            if (other.transform.root.TryGetComponent(out EnemyAI enemyAI)
+            print("Collided with enemy");
 
-            && (enemyAI.currentState == EnemyAI.ActionState.IDLE || enemyAI.currentState == EnemyAI.ActionState.PATROL))
+            EnemyAI enemyAI = other.gameObject.GetComponent<EnemyAI>();
+            EnemyAttack enemyAttack = other.gameObject.GetComponent<EnemyAttack>();
+
+            print(enemyAI.currentState == EnemyAI.ActionState.IDLE);
+
+            if (enemyAI.currentState == EnemyAI.ActionState.IDLE
+            || enemyAI.currentState == EnemyAI.ActionState.PATROL
+            || enemyAttack.isStunned)
             {
-                canSteal = true;
 
                 if (isStealing) {
                     currentTarget = enemyAI;
@@ -82,10 +90,21 @@ public class PlayerSteal : MonoBehaviour
                     currentTarget = null;
                     enemyAI.UISteal.SetActive(true);
                 }
+
+                print("Can Steal!");
+                canSteal = true;
             }
         }
 
-        else
+        // else
+        // {
+        //     canSteal = false;
+        //     currentTarget = null;
+        // }
+    }
+
+    private void OnTriggerExit(Collider other) {
+        if (other.gameObject.CompareTag("Enemy") && !other.isTrigger)
         {
             canSteal = false;
             currentTarget = null;

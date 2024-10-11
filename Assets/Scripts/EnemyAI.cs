@@ -101,7 +101,7 @@ public class EnemyAI : MonoBehaviour
             
             UISteal.SetActive(false);
 
-            print(DistanceToPlayer() + "; CanAttack == " + (DistanceToPlayer() <= attackRange));
+            // print(DistanceToPlayer() + "; CanAttack == " + (DistanceToPlayer() <= attackRange));
  
             if (DistanceToPlayer() <= attackRange)
             {
